@@ -1,0 +1,14 @@
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+
+# MLFlow
+mlruns/
+
+# Enviroment variables
+.env
+
+# Python virtual environment
+**/.venv/
+
+# Misc. workspaces
+/other

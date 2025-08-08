@@ -1,0 +1,49 @@
+{
+  "library_info": {
+    "library": "litellm",
+    "source_urls": [
+      "https://github.com/BerriAI/litellm"
+    ],
+    "core_concepts": [
+      "LiteLLM Proxy",
+      "API Key Authentication",
+      "Custom Authentication",
+      "FastAPI FastAPI"
+    ],
+    "patterns": [
+      "Authentication using API keys",
+      "User-defined authentication logic",
+      "Asynchronous key generation decisions",
+      "Environment variable management"
+    ],
+    "methods": [
+      "user_api_key_auth",
+      "generate_key_fn"
+    ],
+    "installation": "The installation of litellm proxy example_config_yaml custom_auth.py is not directly related to the JSON object, as it's a Python file that contains authentication logic for LiteLLM Proxy.",
+    "examples": [
+      "async def user_api_key_auth(request: Request, api_key: str) -> UserAPIKeyAuth",
+      "async def generate_key_fn(data: GenerateKeyRequest)",
+      "async def make_completions():",
+      "async def custom_auth_example_usage()"
+    ]
+  },
+  "examples": [
+    {
+      "use_case": "Route OpenAI-compatible API requests to different LLM providers using LiteLLM.",
+      "code": "from fastapi import FastAPI, HTTPException\nimport litellm\nfrom litellm.proxy.auth import user_api_key_auth, generate_key_fn\nimport os\n\napp = FastAPI()\n\n@app.post(\"/auth\")\nasync def authenticate_user(api_key: str):\n    try:\n        response = await user_api_key_auth(api_key)\n        return response\n    except Exception as e:\n        raise HTTPException(status_code=401, detail=str(e))\n\n@app.post(\"/generate-key\")\nasync def generate_api_key():\n    key = await generate_key_fn()\n    return {\"api_key\": key}\n\n# Example endpoint for OpenAI-compatible requests\n@app.post(\"/openai/chat/completions\")\nasync def chat_completions(messages: list):\n    response = litellm.chat.completions.create(\n        model=\"gpt-4\",\n        messages=messages,\n        api_key=os.getenv(\"API_KEY\")\n    )\n    return response",
+      "explanation": "This code example demonstrates authentication using LiteLLM proxy methods. First, we import FastAPI and necessary authentication functions from litellm.proxy.auth. Then we define routes for user authentication (POST /auth) and API key generation (POST /generate-key). The authentication logic validates API keys against the proxy system, while generating API keys allows users to create secure access tokens. Finally, an OpenAI-compatible chat completion endpoint is defined that uses LiteLLM's chat functionality.",
+      "best_practices": [
+        "Use environment variables for API key management",
+        "Implement asynchronous authentication decisions",
+        "Validate user credentials before routing requests",
+        "Generate secure API keys with appropriate permissions"
+      ],
+      "imports": [
+        "fastapi",
+        "litellm.proxy.auth",
+        "os"
+      ]
+    }
+  ]
+}

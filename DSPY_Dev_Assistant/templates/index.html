@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSPy Dev Assistant - Interactive Overview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: DevTool Slate -->
+    <!-- Application Structure Plan: The application is structured as a single-page narrative, guiding the user from a high-level overview to deep-level code exploration. It starts with a hero section, followed by interactive cards for key features, a visual diagram of the project structure, a clear step-by-step usage guide, and finally, a tabbed code explorer. This thematic flow was chosen because it allows a developer to quickly grasp the project's value proposition and then dive into the specifics (like architecture and code) at their own pace, which is a more intuitive and engaging user journey than reading a static document. -->
+    <!-- Visualization & Content Choices:
+        - Report Info: Core Features -> Goal: Inform/Organize -> Viz/Method: Interactive Cards (HTML/JS) -> Interaction: Click to reveal details -> Justification: Breaks down complex features into digestible, user-triggered chunks, preventing information overload.
+        - Report Info: Project Structure -> Goal: Organize/Inform -> Viz/Method: Visual File Tree (HTML/CSS) -> Interaction: Hover to see file purpose -> Justification: Translates a boring text tree into a quick, scannable visual diagram that clarifies the project's architecture instantly.
+        - Report Info: How to Run -> Goal: Inform -> Viz/Method: Styled Code Blocks (HTML/CSS) -> Interaction: Copy-to-clipboard button (JS) -> Justification: Improves usability by making setup commands easy to grab and use.
+        - Report Info: Source Code -> Goal: Explore/Inform -> Viz/Method: Tabbed Code Viewer (HTML/JS) -> Interaction: Click tabs to switch files -> Justification: Provides immediate access to the core logic of the application without making the user leave the page, which is the most direct way to engage a developer audience.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s;
+        }
+        .nav-link:hover {
+            color: #0ea5e9; /* sky-500 */
+        }
+        .feature-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .code-tab.active {
+            border-color: #0ea5e9; /* sky-500 */
+            color: #0ea5e9;
+            background-color: #f0f9ff; /* sky-50 */
+        }
+        .code-block {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .file-tree-item {
+            position: relative;
+        }
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .file-tree-item:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white/80 backdrop-blur-sm sticky top-0 z-50 border-b border-slate-200">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-slate-800">
+                🤖 <span class="ml-2">DSPy Dev Assistant</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="nav-link text-slate-600 font-medium">Features</a>
+                <a href="#structure" class="nav-link text-slate-600 font-medium">Structure</a>
+                <a href="#usage" class="nav-link text-slate-600 font-medium">Usage</a>
+                <a href="#code" class="nav-link text-slate-600 font-medium">Code Explorer</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12 md:py-20">
+
+        <!-- Hero Section -->
+        <section id="hero" class="text-center mb-20">
+            <h1 class="text-4xl md:text-6xl font-bold text-slate-800 mb-4">A Self-Correcting Developer Tool</h1>
+            <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">
+                Explore the architecture of a powerful assistant built with the DSPy framework. It generates, explains, and fixes code while fact-checking its own output to ensure accuracy and reliability.
+            </p>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Core Features</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="feature-card bg-white p-6 rounded-lg border border-slate-200">
+                    <div class="text-3xl mb-4">🧠</div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">RAG</h3>
+                    <p class="text-slate-600">The assistant uses Retrieval-Augmented Generation to pull information from a knowledge base, ensuring its responses are context-aware and well-informed.</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-lg border border-slate-200">
+                    <div class="text-3xl mb-4">🧱</div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Modular Architecture</h3>
+                    <p class="text-slate-600">Built with composable `dspy.Module` classes, the architecture is clean, scalable, and easy to maintain or extend with new capabilities.</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-lg border border-slate-200">
+                    <div class="text-3xl mb-4">✅</div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Self-Correction</h3>
+                    <p class="text-slate-600">A custom `VerificationModule` fact-checks generated code against documentation and automatically corrects it if necessary, ensuring high reliability.</p>
+                </div>
+                <div class="feature-card bg-white p-6 rounded-lg border border-slate-200">
+                    <div class="text-3xl mb-4">⚙️</div>
+                    <h3 class="text-xl font-semibold mb-2 text-slate-800">Optimized Compilation</h3>
+                    <p class="text-slate-600">Uses DSPy's `BootstrapFewShot` compiler to learn from examples, significantly improving reliability and reducing code hallucinations.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Structure Section -->
+        <section id="structure" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Project Structure</h2>
+            <div class="bg-white p-8 rounded-lg border border-slate-200 max-w-2xl mx-auto font-mono text-sm text-slate-700">
+                <div class="file-tree-item mb-2">
+                    <span>📁 dspy_dev_assistant/</span>
+                    <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Root project directory</div>
+                </div>
+                <div class="pl-6">
+                    <div class="file-tree-item mb-2">
+                        <span>📄 main.py</span>
+                        <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Main script to run the assistant</div>
+                    </div>
+                    <div class="file-tree-item mb-2">
+                        <span>📄 requirements.txt</span>
+                        <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Project dependencies</div>
+                    </div>
+                    <div class="file-tree-item mb-2">
+                        <span>📄 README.md</span>
+                        <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Project overview and instructions</div>
+                    </div>
+                    <div class="file-tree-item mb-2">
+                        <span>📁 assistant/</span>
+                        <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Core application logic</div>
+                    </div>
+                    <div class="pl-12">
+                        <div class="file-tree-item mb-2"><span>📄 __init__.py</span></div>
+                        <div class="file-tree-item mb-2">
+                            <span>📄 modules.py</span>
+                            <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">All dspy.Module classes</div>
+                        </div>
+                        <div class="file-tree-item mb-2">
+                            <span>📄 signatures.py</span>
+                            <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">All dspy.Signature classes</div>
+                        </div>
+                    </div>
+                    <div class="file-tree-item">
+                        <span>📁 data/</span>
+                        <div class="tooltip absolute -top-8 left-0 bg-slate-800 text-white text-xs rounded py-1 px-2">Training examples for compilation</div>
+                    </div>
+                    <div class="pl-12">
+                        <div class="file-tree-item"><span>📄 trainset.py</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How to Run Section -->
+        <section id="usage" class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">How to Run</h2>
+            <div class="max-w-3xl mx-auto space-y-8">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-lg">1</div>
+                    <div class="ml-6">
+                        <h3 class="text-xl font-semibold mb-2 text-slate-800">Install Dependencies</h3>
+                        <p class="text-slate-600 mb-4">Get all the necessary packages for the project.</p>
+                        <div class="bg-slate-800 rounded-lg p-4 text-white relative">
+                            <code>pip install -r requirements.txt</code>
+                            <button onclick="copyToClipboard('pip install -r requirements.txt', this)" class="absolute top-2 right-2 bg-slate-600 hover:bg-slate-500 text-white text-xs font-bold py-1 px-2 rounded">Copy</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-lg">2</div>
+                    <div class="ml-6">
+                        <h3 class="text-xl font-semibold mb-2 text-slate-800">Configure Environment</h3>
+                        <p class="text-slate-600">Set your `OPENAI_API_KEY` environment variable. The assistant is pre-configured for OpenAI but can be adapted for any DSPy-supported LLM.</p>
+                    </div>
+                </div>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 h-10 w-10 rounded-full bg-sky-500 text-white flex items-center justify-center font-bold text-lg">3</div>
+                    <div class="ml-6">
+                        <h3 class="text-xl font-semibold mb-2 text-slate-800">Run the Assistant</h3>
+                        <p class="text-slate-600 mb-4">Execute the main script to initialize, compile, and run a sample query.</p>
+                        <div class="bg-slate-800 rounded-lg p-4 text-white relative">
+                            <code>python main.py</code>
+                            <button onclick="copyToClipboard('python main.py', this)" class="absolute top-2 right-2 bg-slate-600 hover:bg-slate-500 text-white text-xs font-bold py-1 px-2 rounded">Copy</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Code Explorer Section -->
+        <section id="code">
+            <h2 class="text-3xl font-bold text-center mb-12 text-slate-800">Code Explorer</h2>
+            <div class="bg-white rounded-lg border border-slate-200 overflow-hidden">
+                <div class="border-b border-slate-200">
+                    <nav class="flex -mb-px" id="code-tabs">
+                        <button data-target="signatures-code" class="code-tab active text-sm font-medium py-3 px-5 border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+                            signatures.py
+                        </button>
+                        <button data-target="modules-code" class="code-tab text-sm font-medium py-3 px-5 border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+                            modules.py
+                        </button>
+                        <button data-target="trainset-code" class="code-tab text-sm font-medium py-3 px-5 border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+                            trainset.py
+                        </button>
+                         <button data-target="main-code" class="code-tab text-sm font-medium py-3 px-5 border-b-2 border-transparent text-slate-500 hover:text-slate-700">
+                            main.py
+                        </button>
+                    </nav>
+                </div>
+                <div class="p-2 bg-slate-800">
+                    <pre id="signatures-code" class="code-block language-python text-sm text-white p-4"><code class="language-python">
+import dspy
+from pydantic import BaseModel, Field
+
+# --- Signatures for Core Generation Tasks ---
+
+class CodeGenerator(dspy.Signature):
+    """Generate Python code based on a detailed description."""
+    description = dspy.InputField(desc="A detailed description of the desired code's functionality.")
+    code = dspy.OutputField(desc="The generated Python code.")
+
+class CodeQuestionAnswering(dspy.Signature):
+    """Answer a question about the given code context."""
+    context = dspy.InputField(desc="Relevant code snippets from the user's codebase.")
+    question = dspy.InputField(desc="The user's question about the code.")
+    answer = dspy.OutputField(desc="A detailed answer to the question.")
+
+# --- Signature for the Verification Module ---
+
+class VerificationSignature(dspy.Signature):
+    """Verify a generated answer against the provided documentation context. If the answer is incorrect, correct it."""
+    context = dspy.InputField(desc="Relevant documentation for fact-checking.")
+    question = dspy.InputField(desc="The original user question or programming task.")
+    generated_answer = dspy.InputField(desc="The answer produced by the assistant that needs to be checked.")
+
+    verdict = dspy.OutputField(desc="A simple 'Correct' or 'Incorrect' verdict based on the context.")
+    corrected_answer = dspy.OutputField(desc="The corrected answer. If the verdict is 'Correct', this should be the same as the generated_answer.")
+                    </code></pre>
+                    <pre id="modules-code" class="code-block language-python text-sm text-white p-4 hidden"><code class="language-python">
+import dspy
+from .signatures import CodeGenerator, VerificationSignature
+
+class VerificationModule(dspy.Module):
+    """A module to verify and correct generated code."""
+    def __init__(self):
+        super().__init__()
+        self.retriever = dspy.ColBERTv2(url='http://20.102.90.50:2017/wiki17_abstracts')
+        self.verifier = dspy.Predict(VerificationSignature)
+
+    def forward(self, question, generated_answer):
+        context = self.retriever(question, k=1).passages[0]
+        result = self.verifier(
+            context=context,
+            question=question,
+            generated_answer=generated_answer
+        )
+        return result
+
+class DevAssistant(dspy.Module):
+    """The main module for our self-correcting developer assistant."""
+    def __init__(self):
+        super().__init__()
+        self.generate_code = dspy.Predict(CodeGenerator)
+        self.verifier = VerificationModule()
+
+    def forward(self, user_query, task="generate"):
+        if task == "generate":
+            generated_output = self.generate_code(description=user_query)
+            verification_result = self.verifier(
+                question=user_query,
+                generated_answer=generated_output.code
+            )
+            if "incorrect" in verification_result.verdict.lower():
+                return verification_result.corrected_answer
+            else:
+                return generated_output.code
+        else:
+            raise ValueError(f"Unknown task: {task}")
+                    </code></pre>
+                    <pre id="trainset-code" class="code-block language-python text-sm text-white p-4 hidden"><code class="language-python">
+import dspy
+
+def get_trainset():
+    """Returns a list of training examples for compiling the DevAssistant."""
+    train_example_1 = dspy.Example(
+        question="Write a Python loop to iterate over a dictionary's items.",
+        generated_answer="for key, value in my_dict.iteritems(): print(f'{key}: {value}')",
+        context="In Python 3, the `iteritems()` method was removed. You should use the `items()` method instead.",
+        verdict="Incorrect",
+        corrected_answer="for key, value in my_dict.items(): print(f'{key}: {value}')"
+    ).with_inputs("question", "generated_answer", "context")
+
+    train_example_2 = dspy.Example(
+        question="How do I open a file in Python?",
+        generated_answer="with open('my_file.txt', 'r') as f: content = f.read()",
+        context="The recommended way to open a file in Python is using the `with` statement.",
+        verdict="Correct",
+        corrected_answer="with open('my_file.txt', 'r') as f: content = f.read()"
+    ).with_inputs("question", "generated_answer", "context")
+
+    return [train_example_1, train_example_2]
+                    </code></pre>
+                    <pre id="main-code" class="code-block language-python text-sm text-white p-4 hidden"><code class="language-python">
+import dspy
+import os
+from assistant.modules import DevAssistant
+from data.trainset import get_trainset
+
+def main():
+    """Main function to configure DSPy, compile, and run the DevAssistant."""
+    llm = dspy.OpenAI(model='gpt-4o-mini', max_tokens=4000)
+    dspy.settings.configure(lm=llm)
+
+    trainset = get_trainset()
+
+    compiler = dspy.BootstrapFewShot(metric=None)
+
+    print("INFO: Compiling the DevAssistant...")
+    compiled_assistant = compiler.compile(DevAssistant(), trainset=trainset)
+    print("INFO: Compilation complete.")
+
+    user_query = "Write a Python loop to iterate over a dictionary's items."
+    final_code = compiled_assistant(user_query=user_query)
+
+    print("\n--- Final Generated Code ---")
+    print(final_code)
+    print("--------------------------\n")
+
+if __name__ == "__main__":
+    main()
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-20">
+        <div class="container mx-auto px-6 py-8 text-center text-slate-500">
+            <p>&copy; 2025 DSPy Dev Assistant Overview. An interactive exploration.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Logic for Copy to Clipboard
+        function copyToClipboard(text, buttonElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                buttonElement.textContent = 'Copied!';
+                setTimeout(() => {
+                    buttonElement.textContent = 'Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        // Logic for Code Explorer Tabs
+        const tabs = document.querySelectorAll('.code-tab');
+        const codeBlocks = document.querySelectorAll('.code-block');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Deactivate all tabs and hide all blocks
+                tabs.forEach(t => t.classList.remove('active'));
+                codeBlocks.forEach(b => b.classList.add('hidden'));
+
+                // Activate clicked tab and show target block
+                tab.classList.add('active');
+                const targetId = tab.getAttribute('data-target');
+                document.getElementById(targetId).classList.remove('hidden');
+            });
+        });
+    </script>
+
+</body>
+</html>

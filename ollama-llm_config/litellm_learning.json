@@ -1,0 +1,57 @@
+{
+  "library_info": {
+    "library": "litellm",
+    "source_urls": [
+      "https://github.com/BerriAI/litellm"
+    ],
+    "core_concepts": [
+      "Unified interface for multiple LLM providers",
+      "Model abstraction layer that hides provider-specific details",
+      "Support for various model types (chat, text generation)",
+      "Integration with LangChain for complex workflows",
+      "VertexAI configuration requirements (project ID, location)"
+    ],
+    "patterns": [
+      "Using litellm.completion() for model inference",
+      "Setting provider-specific configurations",
+      "Handling model responses in standardized format",
+      "Configuring VertexAI with vertex_project and vertex_location",
+      "Managing multiple LLM providers in a single application"
+    ],
+    "methods": [
+      "litellm.completion() - Main method for model inference",
+      "litellm.vertex_project - Set Google Cloud Project ID",
+      "litellm.vertex_location - Set Vertex AI region",
+      "litellm.get_model_info() - Get information about supported models",
+      "litellm.set_verbose() - Enable detailed logging"
+    ],
+    "installation": "To use these examples, install the required packages:\n\n```bash\npip install litellm==0.1.388\npip install langchain\n```\n\nFor VertexAI integration, also ensure:\n- Application Default Credentials are configured via `gcloud auth application-default login`\n- Google Cloud Project ID and region are set in the code",
+    "examples": [
+      "from litellm import completion\nresponse = completion(model='gpt-4', messages=[{'role': 'user', 'content': 'Hello'}])",
+      "litellm.vertex_project = 'your-project-id'\nlitellm.vertex_location = 'us-central1'\nresponse = completion(model='chat-bison', messages=[{'role': 'user', 'content': 'What is liteLLM?'}])",
+      "from langchain.llms import LlamaCpp\nfrom langchain import PromptTemplate, LLMChain\nllm = LlamaCpp(model_path='/path/to/model')\nllm_chain = LLMChain(prompt=prompt, llm=llm)",
+      "import litellm\nresponse = completion(model='azure/gpt-4', messages=[{'role': 'user', 'content': 'Hello'}], api_key='your-key', api_base='your-endpoint')",
+      "from litellm import completion\nresponse = completion(model='text-bison@001', messages=[{'role': 'user', 'content': 'What is liteLLM?'}], temperature=0.4, top_k=10)"
+    ]
+  },
+  "examples": [
+    {
+      "use_case": "Route OpenAI-compatible API requests to different LLM providers using LiteLLM.",
+      "code": "import litellm\nfrom typing import Dict, Any\n\nclass LLMRouter:\n    def __init__(self):\n        # Configure providers with their specific settings\n        self.providers = {\n            'openai': {\n                'model': 'gpt-4',\n                'api_key': 'your-openai-api-key'\n            },\n            'azure': {\n                'model': 'gpt-4',\n                'api_key': 'your-azure-api-key',\n                'api_version': '2023-07-01-preview',\n                'api_base': 'https://your-resource.azure.com'\n            },\n            'vertexai': {\n                'model': 'chat-bison',\n                'project_id': 'your-project-id',\n                'location': 'us-central1'\n            }\n        }\n\n    def route_request(self, provider: str, messages: list, **kwargs) -> Dict[str, Any]:\n        \"\"\"\n        Route request to appropriate provider based on provider name\n        \"\"\"\n        if provider not in self.providers:\n            raise ValueError(f'Unsupported provider: {provider}')\n\n        # Prepare the configuration for the specific provider\n        config = self.providers[provider].copy()\n        \n        # Add or override with any additional parameters\n        config.update(kwargs)\n        \n        try:\n            # Make the completion request using litellm\n            response = litellm.completion(\n                model=config['model'],\n                messages=messages,\n                **{k: v for k, v in config.items() if k != 'model'}\n            )\n            return {\n                'provider': provider,\n                'response': response\n            }\n        except Exception as e:\n            return {\n                'error': str(e)\n            }\n\n# Example usage\nif __name__ == '__main__':\n    router = LLMRouter()\n    \n    # Sample messages for the request\n    messages = [\n        {'role': 'user', 'content': 'What is the capital of France?'}\n    ]\n    \n    # Route to different providers\n    print('Routing to OpenAI:')\n    result = router.route_request('openai', messages)\n    print(result)\n    \n    print('\\nRouting to Azure:')\n    result = router.route_request('azure', messages)\n    print(result)\n    \n    print('\\nRouting to VertexAI:')\n    result = router.route_request('vertexai', messages)\n    print(result)",
+      "explanation": "This code example demonstrates how to route OpenAI-compatible API requests to different LLM providers using LiteLLM. The implementation includes: 1) A LLMRouter class that manages configurations for multiple providers (OpenAI, Azure, VertexAI), 2) A route_request method that selects the appropriate provider based on input parameters, 3) Proper configuration handling for each provider type, 4) Error handling for failed requests, and 5) Example usage showing how to route requests to different providers. The code abstracts away provider-specific details through LiteLLM's unified interface while allowing customization of model parameters for each provider.",
+      "best_practices": [
+        "Always validate provider names before routing requests",
+        "Handle exceptions gracefully when making API calls",
+        "Store sensitive information like API keys securely (not in code)",
+        "Use environment variables for configuration values",
+        "Implement logging to track request routing and performance",
+        "Test with different model types and providers before production use"
+      ],
+      "imports": [
+        "litellm",
+        "typing.Dict",
+        "typing.Any"
+      ]
+    }
+  ]
+}

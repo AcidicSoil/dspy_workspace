@@ -1,0 +1,54 @@
+{
+  "library_info": {
+    "library": "vllm",
+    "source_urls": [
+      "https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html"
+    ],
+    "core_concepts": [
+      "vLLM engine",
+      "OpenAI-compatible HTTP API",
+      "Ray Serve LLM",
+      "Scalable model serving",
+      "Multi-modal inputs",
+      "Re-ranking and scoring"
+    ],
+    "patterns": [
+      "Using curl commands to send requests to endpoints",
+      "Support for both single and batch input processing",
+      "Integration with Hugging Face processors",
+      "Use of priority and activation flags in requests",
+      "Compatibility with Jina AI and Cohere APIs"
+    ],
+    "methods": [
+      "vllm serve",
+      "Ray Serve deployment",
+      "POST requests to /score or /rerank endpoints",
+      "Using mm_processor_kwargs for multi-modal inputs",
+      "Handling of document lists in reranking tasks"
+    ],
+    "installation": "To use the described features, one needs to have vLLM and Ray Serve installed. The example uses `vllm serve` command and Ray Serve LLM integration.",
+    "examples": [
+      "curl -X 'POST' 'http://localhost:8000/v1/rerank' -H 'accept: application/json' -H 'Content-Type: application/json' -d '{\"model\": \"BAAI/bge-reranker-base\", \"query\": \"What is the capital of France?\", \"documents\": [\"The capital of Brazil is Brasilia.\", \"The capital of France is Paris.\", \"Horses and cows are both animals\"]}'",
+      "import requests\nresponse = requests.post(\"http://localhost:8000/v1/score\", json={\"model\": \"jinaai/jina-reranker-m0\", \"text_1\": \"slm markdown\", \"text_2\": {\"content\": [{\"type\": \"image_url\", \"image_url\": {\"url\": \"https://raw.githubusercontent.com/jina-ai/multimodal-reranker-test/main/handelsblatt-preview.png\"}}, {\"type\": \"image_url\", \"image_url\": {\"url\": \"https://raw.githubusercontent.com/jina-ai/multimodal-reranker-test/main/paper-11.png\"}}]}})\nresponse.raise_for_status()\nprint(response.json())"
+    ]
+  },
+  "examples": [
+    {
+      "use_case": "Deploy a local LLM with vLLM and serve it using the OpenAI-compatible API.",
+      "code": "import subprocess\nimport time\n\ndef deploy_local_llm():\n    # Start the vLLM server with a specific model\n    # This example uses the 'meta/llama3-8b' model\n    try:\n        # Run the vLLM serve command\n        process = subprocess.Popen([\n            'vllm', 'serve', \n            'meta/llama3-8b',\n            '--host', '0.0.0.0',\n            '--port', '8000',\n            '--dtype', 'bfloat16'\n        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)\n        \n        # Give the server time to start\n        time.sleep(5)\n        \n        print(f\"vLLM server started with PID: {process.pid}\")\n        print(\"Server is running at http://0.0.0.0:8000/v1/\")\n        \n        # For demonstration purposes, we'll just show the command that would be used\n        print(\"To test the API, use curl:\")\n        print(\"curl http://localhost:8000/v1/completions -H 'Content-Type: application/json' -d '{\\\"prompt\\\": \\\"Hello world\\\", \\\"max_tokens\\\": 10}'\")\n        \n        return process.pid\n    except Exception as e:\n        print(f\"Error starting vLLM server: {e}\")\n        return None\n\n# Deploy the local LLM\nif __name__ == \"__main__\":\n    deploy_local_llm()",
+      "explanation": "This code demonstrates how to deploy a local LLM using vLLM with an OpenAI-compatible API. The process involves:\n\n1. Using subprocess.Popen to run the 'vllm serve' command which starts the server\n2. Specifying the model to use ('meta/llama3-8b')\n3. Configuring the server to listen on all interfaces (0.0.0.0) and port 8000\n4. Setting the data type to bfloat16 for efficient inference\n5. Allowing time for the server to initialize before showing usage examples\n6. Providing a curl command example that demonstrates how to interact with the API\n\nThe server will be accessible at http://localhost:8000/v1/ and will support OpenAI-compatible endpoints like /completions.",
+      "best_practices": [
+        "Always specify the model explicitly when deploying with vLLM",
+        "Use appropriate data types (bfloat16, float16) to balance performance and accuracy",
+        "Configure the server to listen on specific interfaces for security purposes",
+        "Set appropriate timeouts and resource limits for production deployments",
+        "Test API endpoints after deployment using curl or similar tools",
+        "Monitor server logs for debugging and performance optimization"
+      ],
+      "imports": [
+        "subprocess",
+        "time"
+      ]
+    }
+  ]
+}
