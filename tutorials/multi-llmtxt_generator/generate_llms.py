@@ -7,7 +7,9 @@ from repo_helpers import gather_repository_info
 
 load_dotenv()
 
-def generate_llms_txt_for_dspy():
+def generate_llms_txt_for_dspy(
+    repo_url="https://github.com/openai/openai-agents-python",
+):
     # Correct Ollama LM initialization
     lm = dspy.LM(
         "ollama_chat/hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS",
@@ -87,7 +89,7 @@ def generate_llms_txt_for_dspy():
 
     analyzer = RepositoryAnalyzer()
 
-    repo_url = "https://github.com/stanfordnlp/dspy"
+#    repo_url = "https://github.com/stanfordnlp/dspy"
     file_tree, readme_content, package_files = gather_repository_info(repo_url)
 
     result = analyzer(

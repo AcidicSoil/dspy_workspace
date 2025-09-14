@@ -1,5 +1,7 @@
-dspy-ai
-datasets
+dspy
+datasets<4.0.0
 ollama
 #Add other dependencies like mlflow if you use them
-mlflow>=2.20
+mlflow
+orjson
+litellm[proxy]

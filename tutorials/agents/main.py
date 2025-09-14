@@ -12,7 +12,7 @@ import mlflow
 # This will automatically log traces and evaluation results.
 # -----------------------------------
 mlflow.set_tracking_uri("http://localhost:5000")
-mlflow.set_experiment("DSPy Multi-Hop Agent")
+mlflow.set_experiment("DSPy")
 mlflow.dspy.autolog()
 # MLFLOW_ENABLED = True
 # -----------------------------------
@@ -86,7 +86,7 @@ def main():
             try:
                 # Find the latest run from the training experiment
                 runs = mlflow.search_runs(
-                    experiment_names=["DSPy Multi-Hop Agent"],
+                    experiment_names=["DSPy"],
                     filter_string="tags.mlflow.runName = 'agent_optimization'",
                     order_by=["start_time DESC"],
                 )

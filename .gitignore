@@ -12,3 +12,4 @@ mlruns/
 
 # Misc. workspaces
 /other
+*:Zone.Identifier

@@ -6,15 +6,15 @@ from evaluation.metrics import top5_recall
 import mlflow
 
 # --- Optional: MLflow Setup ---
-# To enable MLflow, start the server (`mlflow ui`) and uncomment the following lines.
+# To enable MLflow, start the server (`mlflow server`) and uncomment the following lines.
 # This will automatically log traces and allow for model versioning.
 # -----------------------------------
-# mlflow.set_tracking_uri("http://localhost:5000")
-# mlflow.set_experiment("DSPy Multi-Hop Agent")
-# mlflow.dspy.autolog()
+mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_experiment("DSPy")
+mlflow.dspy.autolog()
 # MLFLOW_ENABLED = True
 # -----------------------------------
-MLFLOW_ENABLED = False  # Set to True after uncommenting the lines above
+MLFLOW_ENABLED = True  # Set to True after uncommenting the lines above
 
 
 def main():
@@ -26,7 +26,10 @@ def main():
     # 1. Setup Models and Data
     models = setup_models()
     try:
-        teacher_model = dspy.LM(model="qwen3coder", max_tokens=4000)
+        teacher_model = dspy.LM(
+            model="ollama_chat/hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS",
+            max_tokens=4000,
+        )
     except ImportError:
         print("Warning: Qwen3 config failed. Using student model as teacher.")
         print("Optimization quality will be significantly lower.")
