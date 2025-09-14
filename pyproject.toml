@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dspy-workspace"
+version = "0.1.0"
+urls = {"Homepage" = "TBD", "Repository" = "TBD"}
+description = "Collection of DSPy-based tools, configs, and tutorials"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "TBD"}
+authors = [{name = "TBD"}]
+dependencies = [
+  "dspy",
+  "requests",
+  "python-dotenv",
+  "beautifulsoup4",
+  "html2text",
+  "pydantic",
+]
+
+[project.optional-dependencies]
+web = [
+  "fastapi",
+  "uvicorn",
+]
+dev = [
+  "mlflow",
+  "openai",
+  "litellm[proxy]",
+  "vllm",
+  "datasets<4.0.0",
+  "ollama",
+  "orjson",
+]
+
+[tool.hatch.build]
+include = [
+  "*.py",
+  "*/**/*.py",
+  "*/**/*.html",
+]
+
+[tool.ruff]
+select = ["E", "F"]
+target-version = "py39"
+
+[tool.pytest.ini_options]
+addopts = "-ra"
