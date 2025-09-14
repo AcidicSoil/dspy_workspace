@@ -33,6 +33,9 @@ dev = [
   "datasets<4.0.0",
   "ollama",
   "orjson",
+  "pre-commit",
+  "ruff",
+  "pytest",
 ]
 
 [tool.hatch.build]
@@ -43,8 +46,11 @@ include = [
 ]
 
 [tool.ruff]
-select = ["E", "F"]
+line-length = 88
 target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
