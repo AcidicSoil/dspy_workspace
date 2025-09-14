@@ -68,3 +68,30 @@ def gather_repository_info(repo_url):
     package_files_content = "\n\n".join(package_files)
 
     return file_tree, readme_content, package_files_content
+
+
+# --- helpers for raw GitHub URLs ---
+
+def owner_repo_from_url(repo_url: str):
+    """Extract (owner, repo) from https or SSH GitHub URLs."""
+    repo_url = repo_url.strip()
+    if repo_url.startswith("git@github.com:"):
+        rest = repo_url.split("git@github.com:", 1)[1]
+        owner, repo = rest.split("/", 1)
+        repo = repo.replace(".git", "").strip("/")
+        return owner, repo
+    if repo_url.startswith(("https://", "http://")):
+        from urllib.parse import urlparse
+        p = urlparse(repo_url)
+        parts = [x for x in p.path.strip("/").split("/") if x]
+        if len(parts) >= 2:
+            owner, repo = parts[0], parts[1].replace(".git", "")
+            return owner, repo
+    raise ValueError("Unrecognized GitHub URL")
+
+def construct_raw_url(repo_url: str, path: str) -> str:
+    """Build a raw.githubusercontent.com URL for a file on the repo’s default branch."""
+    owner, repo = owner_repo_from_url(repo_url)
+    # Uses your existing get_default_branch(repo_url); falls back to 'main' if missing
+    ref = get_default_branch(repo_url) if "get_default_branch" in globals() else "main"
+    return f"https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}"

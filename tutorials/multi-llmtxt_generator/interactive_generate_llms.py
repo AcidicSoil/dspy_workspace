@@ -58,47 +58,7 @@ def generate_llms_txt_for_dspy(repo_url: str):
         api_base="http://localhost:11434",
         api_key="",
         streaming=False,
-        response_format={
-            "type": "json_schema",
-            "json_schema": {
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "project": {
-                            "type": "object",
-                            "properties": {
-                                "name": {"type": "string"},
-                                "description": {"type": "string"},
-                            },
-                            "required": ["name", "description"],
-                        },
-                        "key_concepts": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                        "architecture_overview": {"type": "string"},
-                        "important_directories": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                        "entry_points": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                        "development_info": {
-                            "type": "object",
-                            "properties": {
-                                "test_dependencies": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                                "linting_tools": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                                "optional_dependencies": {"type": "array", "items": {"type": "string"}},
-                            },
-                            "required": ["test_dependencies", "linting_tools"],
-                        },
-                        "usage_examples": {"type": "array", "items": {"type": "string"}, "minItems": 1},
-                    },
-                    "required": [
-                        "project",
-                        "key_concepts",
-                        "architecture_overview",
-                        "important_directories",
-                        "entry_points",
-                        "development_info",
-                        "usage_examples",
-                    ],
-                }
-            },
-        },
+        cache=False,
     )
     dspy.configure(lm=lm)
 
