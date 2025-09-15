@@ -5,10 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "dspy-workspace"
 version = "0.1.0"
-urls = {"Homepage" = "TBD", "Repository" = "TBD"}
+urls = {"Homepage" = "https://github.com/AcidicSoil?tab=repositories", "Repository" = "https://github.com/AcidicSoil/dspy_workspace"}
 description = "Collection of DSPy-based tools, configs, and tutorials"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.9,<3.13"
 license = {text = "TBD"}
 authors = [{name = "TBD"}]
 dependencies = [
@@ -18,6 +18,8 @@ dependencies = [
   "beautifulsoup4",
   "html2text",
   "pydantic",
+  "llm-ctx @ git+https://github.com/AnswerDotAI/llm-ctx.git",
+  "llms_txt",
 ]
 
 [project.optional-dependencies]
@@ -47,10 +49,13 @@ include = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
+target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B"]
 
 [tool.pytest.ini_options]
 addopts = "-ra"
+
+[tool.hatch.metadata]
+allow-direct-references = true

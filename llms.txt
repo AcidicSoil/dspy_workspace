@@ -1,0 +1,35 @@
+# Claude Flow
+
+> To provide a comprehensive AI development environment that utilizes hive-mind coordination, neural computing, and distributed memory systems for efficient task execution, coordination, and integration with platforms like GitHub and Claude Code. The project aims to test and refine these capabilities in an alpha release.
+
+**Remember:**
+- Hive-mind coordination with a queen agent and specialized worker agents
+- Neural computing for pattern recognition and AI optimization
+- Distributed memory system with SQLite persistence and cross-session recall
+- Integration with GitHub for repository automation and security analysis
+- Claude Code integration for AI development workflows
+- 87 MCP tools for comprehensive AI task orchestration
+
+## Docs
+- [README](https://raw.githubusercontent.com/ruvnet/claude-flow/main/.claude/agents/README.md): overview and usage.
+- [Docs Api Openapi](https://raw.githubusercontent.com/ruvnet/claude-flow/main/.claude/agents/documentation/api-docs/docs-api-openapi.md): docs page.
+- [README](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/README.md): docs page.
+- [Api](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/api.md): docs page.
+- [Architecture](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/architecture.md): docs page.
+- [Backends](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/backends.md): docs page.
+- [Configuration](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/configuration.md): docs page.
+- [Changelog](https://raw.githubusercontent.com/ruvnet/claude-flow/main/CHANGELOG.md): reference page.
+
+## Examples
+- [Usage Example](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/examples/usage-example.ts): worked example.
+- [Summary Session 20250806 025626](https://raw.githubusercontent.com/ruvnet/claude-flow/main/benchmark/examples/.claude/checkpoints/summary-session-20250806-025626.md): worked example.
+- [Organization Report](https://raw.githubusercontent.com/ruvnet/claude-flow/main/benchmark/examples/ORGANIZATION_REPORT.md): worked example.
+- [README](https://raw.githubusercontent.com/ruvnet/claude-flow/main/benchmark/examples/README.md): worked example.
+- [Comparative Analysis](https://raw.githubusercontent.com/ruvnet/claude-flow/main/benchmark/examples/advanced/comparative_analysis.py): worked example.
+- [Demo Comprehensive](https://raw.githubusercontent.com/ruvnet/claude-flow/main/benchmark/examples/advanced/demo_comprehensive.py): worked example.
+
+## Optional
+- [Changelog](https://raw.githubusercontent.com/ruvnet/claude-flow/main/CHANGELOG.md): optional reading.
+- [License](https://raw.githubusercontent.com/ruvnet/claude-flow/main/LICENSE): optional reading.
+- [Security](https://raw.githubusercontent.com/ruvnet/claude-flow/main/archive/legacy-memory-system/docs/security.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/ruvnet/claude-flow/main/src/templates/claude-optimized/CHANGELOG.md): optional reading.

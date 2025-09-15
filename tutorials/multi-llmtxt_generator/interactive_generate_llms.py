@@ -18,7 +18,7 @@ HTTPS_RE = re.compile(
     r"^https?://github\.com/([^/]+)/([^/]+?)(?:\.git)?(?:/.*)?$", re.IGNORECASE
 )
 SSH_RE = re.compile(r"^git@github\.com:([^/]+)/([^/]+?)(?:\.git)?$", re.IGNORECASE)
-MODEL_NAME = "hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS"
+MODEL_NAME = "hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M"
 
 
 def normalize_repo_url(url: str) -> str:
@@ -126,3 +126,26 @@ if __name__ == "__main__":
     print("Generated llms.txt file!\nPreview:\n")
     print(result.llms_txt_content[:500] + "...")
     stop_ollama_model(MODEL_NAME)
+
+# Prefer the canonical API, but fall back if needed
+try:
+    from llms_txt import create_ctx
+except ImportError:
+    from llm_ctx.core import create_ctx
+
+# After writing llms.txt
+
+with open("llms.txt", "r", encoding="utf-8") as f:
+    txt = f.read()
+
+# Create context without optional section
+ctx = create_ctx(txt, optional=False)
+with open("llms-ctx.txt", "w", encoding="utf-8") as f:
+    f.write(ctx)
+
+# Create context with optional section
+ctx_full = create_ctx(txt, optional=True)
+with open("llms-ctx-full.txt", "w", encoding="utf-8") as f:
+    f.write(ctx_full)
+
+print("Generated llms-ctx.txt and llms-ctx-full.txt successfully!")

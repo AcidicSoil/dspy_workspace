@@ -13,3 +13,4 @@ mlruns/
 # Misc. workspaces
 /other
 *:Zone.Identifier
+uv.lock
