@@ -1,0 +1,26 @@
+# Prompts
+
+> To extend Codex's functionality with a comprehensive set of prompts and workflows that support structured software development processes, from architectural decisions to deployment, ensuring code quality, automation, and team collaboration.
+
+**Remember:**
+- Modular workflow stages (P0-P9)
+- Architecture Decision Records (ADR)
+- Code quality and linting (ESLint, Prettier)
+- CI/CD integration
+- Test automation (e2e, integration, regression)
+- Deployment pipelines
+
+## Docs
+- [README](https://raw.githubusercontent.com/AcidicSoil/prompts/main/README.md): overview and usage.
+- [Agents](https://raw.githubusercontent.com/AcidicSoil/prompts/main/AGENTS.md): reference page.
+- [Gemini](https://raw.githubusercontent.com/AcidicSoil/prompts/main/GEMINI.md): reference page.
+- [Workflow](https://raw.githubusercontent.com/AcidicSoil/prompts/main/WORKFLOW.md): reference page.
+- [Action Diagram](https://raw.githubusercontent.com/AcidicSoil/prompts/main/action-diagram.md): reference page.
+
+## Examples
+- [README](https://example.com): overview.
+
+## Optional
+- [README](https://example.com): overview.
+
+# Generated: 2025-09-19T16:39:23+00:00 UTC

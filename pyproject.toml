@@ -5,7 +5,6 @@ build-backend = "hatchling.build"
 [project]
 name = "dspy-workspace"
 version = "0.1.0"
-urls = {"Homepage" = "https://github.com/AcidicSoil?tab=repositories", "Repository" = "https://github.com/AcidicSoil/dspy_workspace"}
 description = "Collection of DSPy-based tools, configs, and tutorials"
 readme = "README.md"
 requires-python = ">=3.9,<3.13"

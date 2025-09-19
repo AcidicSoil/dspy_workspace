@@ -1,0 +1,27 @@
+# E2B
+
+> To provide a secure, scalable infrastructure for executing AI-generated code in isolated sandboxes, enabling developers to run and manage code execution safely in the cloud.
+
+**Remember:**
+- Sandboxed execution environment for AI code
+- Cloud-based infrastructure with GCP/AWS support
+- Secure API key authentication
+- JavaScript/Python SDKs for code execution
+- Code interpreter with execution tracking
+- Integrated documentation and examples
+
+## Docs
+- [README](https://raw.githubusercontent.com/e2b-dev/e2b/main/.changeset/README.md): overview and usage.
+- [Contributing](https://raw.githubusercontent.com/e2b-dev/e2b/main/CONTRIBUTING.md): reference page.
+- [Dev](https://raw.githubusercontent.com/e2b-dev/e2b/main/DEV.md): reference page.
+
+## Examples
+- [README](https://example.com): overview.
+
+## Optional
+- [Contributing](https://raw.githubusercontent.com/e2b-dev/e2b/main/CONTRIBUTING.md): optional reading.
+- [License](https://raw.githubusercontent.com/e2b-dev/e2b/main/LICENSE): optional reading.
+- [License](https://raw.githubusercontent.com/e2b-dev/e2b/main/packages/cli/LICENSE): optional reading.
+- [License](https://raw.githubusercontent.com/e2b-dev/e2b/main/packages/connect-python/LICENSE): optional reading.
+- [License](https://raw.githubusercontent.com/e2b-dev/e2b/main/packages/js-sdk/LICENSE): optional reading.
+- [License](https://raw.githubusercontent.com/e2b-dev/e2b/main/packages/python-sdk/LICENSE): optional reading.

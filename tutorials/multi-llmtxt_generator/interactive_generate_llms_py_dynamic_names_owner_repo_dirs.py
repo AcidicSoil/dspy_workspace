@@ -1,16 +1,16 @@
 # interactive_generate_llms.py — prompt user for a valid GitHub URL
+# Timestamp comments are optional and added only if --stamp is passed.
+
 import argparse
+import os
 import re
 import subprocess
+from datetime import datetime, timezone
 
 import dspy
 from dotenv import load_dotenv
-
-# Prefer the user's local helpers if present; fall back to fixed helpers.
-try:
-    from repo_helpers import gather_repository_info  # type: ignore
-except Exception:
-    from fixed_repo_helpers import gather_repository_info  # type: ignore
+from repository_analyzer import RepositoryAnalyzer
+from repo_helpers import gather_repository_info
 
 load_dotenv()
 
@@ -45,6 +45,13 @@ def normalize_repo_url(url: str) -> str:
         "Invalid GitHub URL. Expected https://github.com/<owner>/<repo> "
         "or git@github.com:owner/repo.git"
     )
+
+
+def split_owner_repo(normalized_https_url: str) -> tuple[str, str]:
+    m = HTTPS_RE.match(normalized_https_url)
+    if not m:
+        raise ValueError("Unexpected URL format after normalization.")
+    return m.group(1), m.group(2)
 
 
 def prompt_for_repo_url() -> str:
@@ -101,12 +108,42 @@ def stop_ollama_model(model_name: str) -> None:
         print(f"Warning: Failed to stop model {model_name}: {exc}")
 
 
+def ensure_dir(path: str) -> None:
+    os.makedirs(path, exist_ok=True)
+
+
+def timestamp_comment(prefix: str = "# Generated", tzname: str | None = None) -> str:
+    # Use UTC by default to avoid local ambiguity. User requested comment only.
+    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    tz_note = f" ({tzname})" if tzname else ""
+    return f"{prefix}: {now} UTC{tz_note}"
+
+
+def write_text(path: str, content: str, add_stamp: bool) -> None:
+    if add_stamp:
+        content = content.rstrip() + "\n\n" + timestamp_comment()
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Generate llms.txt for a GitHub repo (interactive-friendly)"
+        description=(
+            "Generate llms.txt for a GitHub repo with organized owner/repo output"
+        )
     )
     parser.add_argument(
         "--repo", help="GitHub repo URL (https://github.com/<owner>/<repo>)"
+    )
+    parser.add_argument(
+        "--outdir",
+        default="artifacts",
+        help="Base directory to save outputs (default: ./artifacts)",
+    )
+    parser.add_argument(
+        "--stamp",
+        action="store_true",
+        help="Append a timestamp as a trailing comment in each text file",
     )
     args = parser.parse_args()
 
@@ -120,32 +157,50 @@ if __name__ == "__main__":
     if not repo_url:
         repo_url = prompt_for_repo_url()
 
+    owner, repo = split_owner_repo(repo_url)
+
+    # Output directory: <outdir>/<owner>/<repo>
+    repo_root = os.path.join(args.outdir, owner, repo)
+    ensure_dir(repo_root)
+
+    # Base names derived from repo for clarity; filenames avoid timestamps
+    base = repo.lower()
+    llms_path = os.path.join(repo_root, f"{base}-llms.txt")
+
+    # Run analysis
     result = generate_llms_txt_for_dspy(repo_url=repo_url)
-    with open("llms.txt", "w", encoding="utf-8") as f:
-        f.write(result.llms_txt_content)
-    print("Generated llms.txt file!\nPreview:\n")
-    print(result.llms_txt_content[:500] + "...")
+
+    # Keep a pristine in-memory copy for parsers (avoid stamping issues)
+    txt = result.llms_txt_content
+
+    # Write llms.txt-like artifact
+    write_text(llms_path, result.llms_txt_content, add_stamp=args.stamp)
+
+    # Prefer the canonical API, but fall back if needed
+    try:
+        from llms_txt import create_ctx
+    except ImportError:
+        from llm_ctx.core import create_ctx
+    # Create contexts from the pristine in-memory text (no stamp inside parser input)
+
+    ctx = create_ctx(txt, optional=False)
+    ctx_full = create_ctx(txt, optional=True)
+
+    ctx_path = os.path.join(repo_root, f"{base}-llms-ctx.txt")
+    ctx_full_path = os.path.join(repo_root, f"{base}-llms-ctx-full.txt")
+
+    write_text(ctx_path, ctx, add_stamp=args.stamp)
+    write_text(ctx_full_path, ctx_full, add_stamp=args.stamp)
+
+    print("Artifacts written:")
+    print(f" - {llms_path}")
+    print(f" - {ctx_path}")
+    print(f" - {ctx_full_path}")
+
+    # Show preview
+    preview = (result.llms_txt_content or "").strip()
+    head = preview[:500] + ("..." if len(preview) > 500 else "")
+    print("\nPreview of llms content:\n")
+    print(head)
+
     stop_ollama_model(MODEL_NAME)
-
-# Prefer the canonical API, but fall back if needed
-try:
-    from llms_txt import create_ctx
-except ImportError:
-    from llm_ctx.core import create_ctx
-
-# After writing llms.txt
-
-with open("llms.txt", "r", encoding="utf-8") as f:
-    txt = f.read()
-
-# Create context without optional section
-ctx = create_ctx(txt, optional=False)
-with open("llms-ctx.txt", "w", encoding="utf-8") as f:
-    f.write(ctx)
-
-# Create context with optional section
-ctx_full = create_ctx(txt, optional=True)
-with open("llms-ctx-full.txt", "w", encoding="utf-8") as f:
-    f.write(ctx_full)
-
-print("Generated llms-ctx.txt and llms-ctx-full.txt successfully!")
