@@ -1,0 +1,25 @@
+# Nexa Sdk
+
+> The Nexa SDK aims to provide a flexible, cross-platform inference framework that enables running large language models (LLMs) and multimodal models on diverse hardware, including Qualcomm NPUs. It supports local inference, model deployment, and integration with an OpenAI-compatible API server, while offering compatibility with multiple model formats and hardware backends.
+
+**Remember:**
+- On-device inference for text, image, and audio processing
+- Cross-platform support for CPU, GPU, and Qualcomm NPU
+- OpenAI-compatible REST API server
+- Model format support: GGUF, MLX, and custom .nexa
+- CLI tools for model inference, management, and deployment
+- Hardware-agnostic backend compatibility (CUDA, Metal, Vulkan)
+
+## Docs
+- [README](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/README.md): overview and usage.
+
+## Examples
+- [README](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/README.md): worked example.
+- [Cv Ocr](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/cv_ocr.py): worked example.
+- [Embedder](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/embedder.py): worked example.
+- [Llm](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/llm.py): worked example.
+- [Rerank](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/rerank.py): worked example.
+- [Vlm](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/examples/python/vlm.py): worked example.
+
+## Optional
+- [License](https://raw.githubusercontent.com/NexaAI/nexa-sdk/main/LICENSE): optional reading.

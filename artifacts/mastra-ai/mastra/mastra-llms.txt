@@ -1,0 +1,37 @@
+# Mastra
+
+> To provide a comprehensive understanding of Mastra's agent functionality for developers and enterprises.
+
+**Remember:**
+- agents
+- tools
+- workflows
+- RAG
+
+## Docs
+- [README](https://raw.githubusercontent.com/mastra-ai/mastra/main/.changeset/README.md): overview and usage.
+- [Algolia Setup](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/ALGOLIA_SETUP.md): docs page.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/CHANGELOG.md): docs page.
+- [Feedback Setup](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/FEEDBACK_SETUP.md): docs page.
+- [README](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/README.md): docs page.
+- [Example Text Generation](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/example-text-generation.md): docs page.
+- [Reference Guide](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/reference-guide.md): docs page.
+- [Claude](https://raw.githubusercontent.com/mastra-ai/mastra/main/CLAUDE.md): reference page.
+
+## Examples
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/agents/_meta.ts): worked example.
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/deployment/_meta.ts): worked example.
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/evals/_meta.ts): worked example.
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/memory/_meta.ts): worked example.
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/observability/_meta.ts): worked example.
+- [Meta](https://raw.githubusercontent.com/mastra-ai/mastra/main/docs/src/content/en/examples/rag/_meta.ts): worked example.
+
+## Optional
+- [Contributing](https://raw.githubusercontent.com/mastra-ai/mastra/main/CONTRIBUTING.md): optional reading.
+- [License](https://raw.githubusercontent.com/mastra-ai/mastra/main/LICENSE.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/auth/auth0/CHANGELOG.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/auth/clerk/CHANGELOG.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/auth/firebase/CHANGELOG.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/auth/supabase/CHANGELOG.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/auth/workos/CHANGELOG.md): optional reading.
+- [Changelog](https://raw.githubusercontent.com/mastra-ai/mastra/main/client-sdks/ai-sdk/CHANGELOG.md): optional reading.

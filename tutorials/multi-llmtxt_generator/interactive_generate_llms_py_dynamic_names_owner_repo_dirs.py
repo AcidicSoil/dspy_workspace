@@ -18,7 +18,7 @@ HTTPS_RE = re.compile(
     r"^https?://github\.com/([^/]+)/([^/]+?)(?:\.git)?(?:/.*)?$", re.IGNORECASE
 )
 SSH_RE = re.compile(r"^git@github\.com:([^/]+)/([^/]+?)(?:\.git)?$", re.IGNORECASE)
-MODEL_NAME = "hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M"
+MODEL_NAME = "hf.co/Manojb/Qwen3-4B-toolcalling-gguf-codex:latest"
 
 
 def normalize_repo_url(url: str) -> str:

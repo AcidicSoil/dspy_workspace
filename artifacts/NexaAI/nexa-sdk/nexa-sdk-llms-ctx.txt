@@ -1,0 +1,587 @@
+<project title="Nexa Sdk" summary="The Nexa SDK aims to provide a flexible, cross-platform inference framework that enables running large language models (LLMs) and multimodal models on diverse hardware, including Qualcomm NPUs. It supports local inference, model deployment, and integration with an OpenAI-compatible API server, while offering compatibility with multiple model formats and hardware backends.">**Remember:**
+- On-device inference for text, image, and audio processing
+- Cross-platform support for CPU, GPU, and Qualcomm NPU
+- OpenAI-compatible REST API server
+- Model format support: GGUF, MLX, and custom .nexa
+- CLI tools for model inference, management, and deployment
+- Hardware-agnostic backend compatibility (CUDA, Metal, Vulkan)<docs><doc title="README" desc="overview and usage."><div align="center">
+  <p>
+      <img width="100%" src="assets/banner.png" alt="Nexa AI Banner">
+  </p>
+
+  <p align="center">
+    <a href="https://docs.nexa.ai">
+        <img src="https://img.shields.io/badge/docs-website-brightgreen?logo=readthedocs" alt="Documentation">
+    </a>
+   <a href="https://x.com/nexa_ai"><img alt="X account" src="https://img.shields.io/twitter/url/https/twitter.com/diffuserslib.svg?style=social&label=Follow%20%40Nexa_AI"></a>
+    <a href="https://discord.com/invite/nexa-ai">
+        <img src="https://img.shields.io/discord/1192186167391682711?color=5865F2&logo=discord&logoColor=white&style=flat-square" alt="Join us on Discord">
+    </a>
+    <a href="https://join.slack.com/t/nexa-ai-community/shared_invite/zt-3837k9xpe-LEty0disTTUnTUQ4O3uuNw">
+        <img src="https://img.shields.io/badge/slack-join%20chat-4A154B?logo=slack&logoColor=white" alt="Join us on Slack">
+    </a>
+</p>
+  
+  ![OS](https://img.shields.io/badge/os-linux%20|%20macOS%20|%20windows-purple)
+  ![Hardware](https://img.shields.io/badge/hardware-CPU%20|%20GPU%20|%20NPU-yellow)
+
+</div>
+
+# Nexa SDK
+
+Nexa SDK is an on-device inference framework that runs any model on any device, across any backend. It runs on CPUs, GPUs, NPUs with backend support for CUDA, Metal, Vulkan, and Qualcomm NPU. It handles multiple input modalities including text 📝, image 🖼️, and audio 🎧. The SDK includes an OpenAI-compatible API server with support for JSON schema-based function calling and streaming. It supports model formats such as GGUF, MLX, Nexa AI's own `.nexa` format, enabling efficient quantized inference across diverse platforms.
+
+## Qualcomm NPU PC Demos
+
+<table>
+<tr>
+<td width="50%">
+<img width="100%" src="assets/PC_demo_2_image.gif" alt="Multi-Image Reasoning Demo">
+<p align="center"><b>🖼️ Multi-Image Reasoning</b><br>Spot the difference across two images in multi-round dialogue.</p>
+</td>
+
+<td width="50%">
+<img width="100%" src="assets/PC_Demo_Agent.gif" alt="Image + Audio Function Call Demo">
+<p align="center"><b>🎤 Image + Text → Function Call</b><br>Snap a poster, add a voice note, and AI agent creates a calendar event.</p>
+</td>
+</tr>
+<tr>
+<td colspan="2" align="center">
+<img width="50%" src="assets/PC_Demo_Audio.gif" alt="Multi-Audio Comparison Demo">
+<p align="center"><b>🎶 Multi-Audio Comparison</b><br>Tell the difference between two music clips locally.</p>
+</td>
+</tr>
+</table>
+
+
+## Recent updates
+#### 📣  **2025.08.20: Qualcomm NPU Support**
+- Qualcomm NPU support for GGUF models.
+OmniNeural-4B is the **first multimodal AI model built natively for NPUs** — handling text, images, and audio in one model.
+- Check the model and demos at [Hugginface repo](https://huggingface.co/NexaAI/OmniNeural-4B)
+- Check our [OmniNeural-4B technical blog](https://nexa.ai/blogs/omnineural-4b)
+- Download our [arm64 with Qualcomm NPU support](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_windows_arm64.exe) installer and try it!
+
+#### 📣  **2025.08.12: ASR & TTS Support in MLX format
+- ASR & TTS model support in MLX format.
+- new "> /mic" mode to transcribe live speech directly in your terminal.
+  
+## Installation
+
+### macOS
+* [arm64](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_macos_arm64.pkg)
+* [x86_64](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_macos_x86_64.pkg)
+
+### Windows
+* [arm64 with Qualcomm NPU support](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_windows_arm64.exe)
+* [x86_64](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_windows_x86_64.exe)
+
+### Linux
+```bash
+curl -fsSL https://github.com/NexaAI/nexa-sdk/releases/latest/download/nexa-cli_linux_x86_64.sh -o install.sh && chmod +x install.sh && ./install.sh && rm install.sh
+```
+
+## Supported Models
+
+You can run any compatible GGUF，MLX, or nexa model from 🤗 Hugging Face by using the `<full repo name>`.
+
+### Qualcomm NPU models
+> [!TIP]
+> You need to download the [arm64 with Qualcomm NPU support](https://nexa-model-hub-bucket.s3.us-west-1.amazonaws.com/public/nexa_sdk/downloads/nexa-cli_windows_arm64.exe) and make sure you have Snapdragon® X Elite chip on your laptop.
+
+#### Quick Start (Windows arm64, Snapdragon X Elite)
+
+1. **Login & Get Access Token (required for Pro Models)**  
+   - Create an account at [sdk.nexa.ai](https://sdk.nexa.ai)  
+   - Go to **Deployment → Create Token**  
+   - Run this once in your terminal (replace with your token):  
+     ```bash
+     nexa config set license '<your_token_here>'
+     ```
+
+2. Run and chat with our multimodal model, OmniNeural-4B, or other models on NPU
+
+```bash
+nexa infer omni-neural
+nexa infer NexaAI/OmniNeural-4B
+nexa infer NexaAI/qwen3-1.7B-npu
+```
+
+
+### GGUF models
+
+> [!TIP]
+> GGUF runs on macOS, Linux, and Windows.
+
+📝 Run and chat with LLMs, e.g. Qwen3:
+
+```bash
+nexa infer ggml-org/Qwen3-1.7B-GGUF
+```
+
+🖼️ Run and chat with Multimodal models, e.g. Qwen2.5-Omni:
+
+```bash
+nexa infer NexaAI/Qwen2.5-Omni-3B-GGUF
+```
+
+### MLX models
+> [!TIP]
+> MLX is macOS-only (Apple Silicon). Many MLX models in the Hugging Face mlx-community organization have quality issues and may not run reliably.
+> We recommend starting with models from our curated [NexaAI Collection](https://huggingface.co/NexaAI/collections) for best results. For example
+
+📝 Run and chat with LLMs, e.g. Qwen3:
+
+```bash
+nexa infer NexaAI/Qwen3-4B-4bit-MLX
+```
+
+🖼️ Run and chat with Multimodal models, e.g. Gemma3n:
+
+```bash
+nexa infer NexaAI/gemma-3n-E4B-it-4bit-MLX
+```
+
+## CLI Reference
+
+| Essential Command                          | What it does                                                        |
+|----------------------------------|----------------------------------------------------------------------|
+| `nexa -h`              | show all CLI commands                              |
+| `nexa pull <repo>`              | Interactive download & cache of a model                              |
+| `nexa infer <repo>`             | Local inference          |
+| `nexa list`                     | Show all cached models with sizes                                    |
+| `nexa remove <repo>` / `nexa clean` | Delete one / all cached models                                   |
+| `nexa serve --host 127.0.0.1:8080` | Launch OpenAI‑compatible REST server                            |
+| `nexa run <repo>`              | Chat with a model via an existing server                             |
+
+👉 To interact with multimodal models, you can drag photos or audio clips directly into the CLI — you can even drop multiple images at once!
+
+See [CLI Reference](https://nexaai.mintlify.app/nexa-sdk-go/NexaCLI) for full commands.
+
+## Acknowledgements
+
+We would like to thank the following projects:
+- [llama.cpp](https://github.com/ggml-org/llama.cpp)
+- [mlx-lm](https://github.com/ml-explore/mlx-lm)
+- [mlx-vlm](https://github.com/Blaizzy/mlx-vlm)
+- [mlx-audio](https://github.com/Blaizzy/mlx-audio)</doc></docs><examples><doc title="README" desc="worked example."># NexaAI Python Examples
+
+This directory contains examples for using the NexaAI Python SDK.
+
+## Prerequisites
+
+- Python 3.10
+  - if you are using conda, you can create a new environment via
+    ```sh
+    conda create -n nexaai python=3.10
+    conda activate nexaai
+    ```
+- Install the latest NexaAI Python SDK from [PyPI](https://pypi.org/project/nexaai/#history).
+
+  Install command by OS:
+
+  - Windows and Linux:
+    ```bash
+    pip install nexaai
+    ```
+  - macOS:
+    ```bash
+    pip install 'nexaai[mlx]'
+    ```
+
+## Running Examples
+
+### LLM
+
+```bash
+nexa pull Qwen/Qwen3-0.6B-GGUF
+
+python llm.py
+```
+
+### Multi-Modal
+
+```bash
+nexa pull NexaAI/gemma-3n-E4B-it-4bit-MLX
+
+python vlm.py
+```
+
+### Reranker
+
+```bash
+nexa pull NexaAI/jina-v2-rerank-mlx
+
+python rerank.py
+```
+
+### Embedder
+
+```bash
+nexa pull NexaAI/jina-v2-fp16-mlx
+
+python embedder.py
+```
+
+### CV
+
+#### OCR
+
+```bash
+nexa pull NexaAI/paddle-ocr-mlx
+
+python cv_ocr.py
+```</doc><doc title="Cv Ocr" desc="worked example.">"""
+NexaAI CV OCR Example
+
+This example demonstrates how to use the NexaAI SDK to perform OCR on an image.
+"""
+
+import os
+from nexaai.cv import CVCapabilities, CVModel, CVModelConfig, CVResults
+
+
+def main():
+    det_model_path = os.path.expanduser(
+        "~/.cache/nexa.ai/nexa_sdk/models/NexaAI/paddle-ocr-mlx/ch_ptocr_v4_det_infer.safetensors")
+    rec_model_path = os.path.expanduser(
+        "~/.cache/nexa.ai/nexa_sdk/models/NexaAI/paddle-ocr-mlx/ch_ptocr_v4_rec_infer.safetensors")
+
+    config = CVModelConfig(capabilities=CVCapabilities.OCR,
+                           det_model_path=det_model_path, rec_model_path=rec_model_path)
+
+    # For now, this modality is only supported in MLX. 
+    cv: CVModel = CVModel.from_(
+        name_or_path=det_model_path, config=config, plugin_id="mlx")
+
+    results: CVResults = cv.infer(os.path.expanduser(
+        "~/.cache/nexa.ai/nexa_sdk/models/NexaAI/paddle-ocr-mlx/test_input.jpg"))
+
+    print(f"Number of results: {results.result_count}")
+    for result in results.results:
+        print(f"[{result.confidence:.2f}] {result.text}")
+
+
+if __name__ == "__main__":
+    main()</doc><doc title="Embedder" desc="worked example.">#!/usr/bin/env python3
+
+"""
+NexaAI Embedding Example - Text Embedding Generation
+
+This example demonstrates how to use the NexaAI SDK to generate text embeddings.
+It includes basic model initialization, single and batch embedding generation, and embedding analysis.
+"""
+
+import os
+import numpy as np
+
+from nexaai.embedder import Embedder, EmbeddingConfig
+
+def main():
+    model_path = os.path.expanduser(
+        "~/.cache/nexa.ai/nexa_sdk/models/NexaAI/jina-v2-fp16-mlx/model.safetensors")
+
+    # For now, this modality is only supported in MLX.
+    embedder: Embedder = Embedder.from_(
+        name_or_path=model_path, plugin_id="mlx")
+    print('Embedder loaded successfully!')
+
+    dim = embedder.get_embedding_dim()
+    print(f"Dimension: {dim}")
+
+    texts = [
+        "On-device AI is a type of AI that is processed on the device itself, rather than in the cloud.",
+        "Nexa AI allows you to run state-of-the-art AI models locally on CPU, GPU, or NPU — from instant use cases to production deployments.",
+        "A ragdoll is a breed of cat that is known for its long, flowing hair and gentle personality.",
+        "The capital of France is Paris."
+    ]
+    embeddings = embedder.generate(
+        texts=texts, config=EmbeddingConfig(batch_size=len(texts)))
+    
+    print("\n" + "="*80)
+    print("GENERATED EMBEDDINGS")
+    print("="*80)
+    
+    for i, (text, embedding) in enumerate(zip(texts, embeddings)):
+        print(f"\nText {i+1}:")
+        print(f"  Content: {text}")
+        print(f"  Embedding shape: {len(embedding)} dimensions")
+        print(f"  First 10 elements: {embedding[:10]}")
+        print("-" * 70)
+
+    # Generate embedding for query
+    query = "what is on device AI"
+    print(f"\n" + "="*80)
+    print("QUERY PROCESSING")
+    print("="*80)
+    print(f"Query: '{query}'")
+    
+    query_embedding = embedder.generate(
+        texts=[query], config=EmbeddingConfig(batch_size=1))[0]
+    print(f"Query embedding shape: {len(query_embedding)} dimensions")
+    
+    # Compute inner product between query and all texts
+    print(f"\n" + "="*80)
+    print("SIMILARITY ANALYSIS (Inner Product)")
+    print("="*80)
+    
+    for i, (text, embedding) in enumerate(zip(texts, embeddings)):
+        # Convert to numpy arrays for easier computation
+        query_vec = np.array(query_embedding)
+        text_vec = np.array(embedding)
+        
+        # Compute inner product (dot product)
+        inner_product = np.dot(query_vec, text_vec)
+        
+        print(f"\nText {i+1}:")
+        print(f"  Content: {text}")
+        print(f"  Inner product with query: {inner_product:.6f}")
+        print("-" * 70)
+
+
+if __name__ == "__main__":
+    main()</doc><doc title="Llm" desc="worked example.">"""
+NexaAI LLM Example
+
+This example demonstrates how to use the NexaAI SDK to work with LLM models.
+"""
+
+import io
+import os
+from typing import List
+
+from nexaai.llm import LLM, GenerationConfig
+from nexaai.common import ModelConfig, ChatMessage
+
+
+def main():
+    # Your model path
+    model = os.path.expanduser(
+        "~/.cache/nexa.ai/nexa_sdk/models/Qwen/Qwen3-0.6B-GGUF/Qwen3-0.6B-Q8_0.gguf")
+
+    # Model configuration
+    m_cfg = ModelConfig()
+
+    # Load model
+    instance: LLM = LLM.from_(
+        model, plugin_id="llama_cpp", device_id="cpu", m_cfg=m_cfg)
+
+    conversation: List[ChatMessage] = [ChatMessage(
+        role="system", content="You are a helpful assistant.")]
+    strbuff = io.StringIO()
+
+    print("Multi-round conversation started. Type '/quit' or '/exit' to end.")
+    print("=" * 50)
+
+    while True:
+        user_input = input("\nUser: ").strip()
+
+        if user_input.startswith("/"):
+            cmds = user_input.split()
+            if cmds[0] in {"/quit", "/exit", "/q"}:
+                print("Goodbye!")
+                break
+            elif cmds[0] in {"/save", "/s"}:
+                instance.save_kv_cache(cmds[1])
+                print("KV cache saved to", cmds[1])
+                continue
+            elif cmds[0] in {"/load", "/l"}:
+                instance.load_kv_cache(cmds[1])
+                print("KV cache loaded from", cmds[1])
+                continue
+            elif cmds[0] in {"/reset", "/r"}:
+                instance.reset()
+                print("Conversation reset")
+                continue
+            else:
+                print("Unknown command")
+                continue
+
+        if not user_input:
+            print("Please provide an input or type '/quit' to exit.")
+            continue
+
+        conversation.append(ChatMessage(role="user", content=user_input))
+
+        # Apply the chat template
+        prompt = instance.apply_chat_template(conversation)
+
+        strbuff.truncate(0)
+        strbuff.seek(0)
+
+        print("Assistant: ", end="", flush=True)
+        # Generate the model response
+        for token in instance.generate_stream(prompt, g_cfg=GenerationConfig(max_tokens=100)):
+            print(token, end="", flush=True)
+            strbuff.write(token)
+
+        # Get profiling data
+        profiling_data = instance.get_profiling_data()
+        if profiling_data is not None:
+            print(profiling_data)
+
+        conversation.append(ChatMessage(
+            role="assistant", content=strbuff.getvalue()))
+
+
+if __name__ == "__main__":
+    main()</doc><doc title="Rerank" desc="worked example.">#!/usr/bin/env python3
+
+"""
+NexaAI Rerank Example - Document Reranking
+
+This example demonstrates how to use the NexaAI SDK to rerank documents based on a query.
+It includes basic model initialization, document reranking, and score analysis.
+"""
+
+import os
+from nexaai.rerank import Reranker, RerankConfig
+
+
+def main():
+    model_path = os.path.expanduser("~/.cache/nexa.ai/nexa_sdk/models/NexaAI/jina-v2-rerank-mlx/jina-reranker-v2-base-multilingual-f16.safetensors")
+    
+    # For now, this modality is only supported in MLX.
+    reranker: Reranker = Reranker.from_(name_or_path=model_path, plugin_id="mlx")
+    documents = [
+        "On-device AI is a type of AI that is processed on the device itself, rather than in the cloud.",
+        "edge computing",
+        "A ragdoll is a breed of cat that is known for its long, flowing hair and gentle personality.",
+        "The capital of France is Paris."
+    ]
+
+    query = "Where is on-device AI?"
+
+    scores = reranker.rerank(query=query, documents=documents, config=RerankConfig(batch_size=len(documents)))
+
+    print(f"Query: {query}")
+    print(f"Documents: {len(documents)} documents")
+    print("-" * 50)
+    for i, score in enumerate(scores):
+        print(f"[{score:.4f}] : {documents[i]}")
+
+
+if __name__ == "__main__":
+    main()</doc><doc title="Vlm" desc="worked example.">#!/usr/bin/env python3
+
+"""
+NexaAI VLM Example - Llama Model Testing
+
+This example demonstrates how to use the NexaAI SDK to work with Llama models.
+It includes basic model initialization, text generation, streaming, and chat template functionality.
+"""
+
+import io
+import os
+import re
+from typing import List, Optional
+
+from nexaai.vlm import VLM, GenerationConfig
+from nexaai.common import ModelConfig, MultiModalMessage, MultiModalMessageContent
+
+
+def parse_media_from_input(user_input: str) -> tuple[str, Optional[List[str]], Optional[List[str]]]:
+    quoted_pattern = r'["\']([^"\']*)["\']'
+    quoted_matches = re.findall(quoted_pattern, user_input)
+
+    prompt = re.sub(quoted_pattern, '', user_input).strip()
+
+    image_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp'}
+    audio_extensions = {'.mp3', '.wav', '.flac', '.aac', '.ogg', '.m4a'}
+
+    image_paths = []
+    audio_paths = []
+
+    for quoted_file in quoted_matches:
+        if quoted_file:
+            if quoted_file.startswith('~'):
+                quoted_file = os.path.expanduser(quoted_file)
+
+            if not os.path.exists(quoted_file):
+                print(f"Warning: File '{quoted_file}' not found")
+                continue
+
+            file_ext = os.path.splitext(quoted_file.lower())[1]
+            if file_ext in image_extensions:
+                image_paths.append(quoted_file)
+            elif file_ext in audio_extensions:
+                audio_paths.append(quoted_file)
+
+    return prompt, image_paths if image_paths else None, audio_paths if audio_paths else None
+
+
+def main():
+    # Your model path
+    model = os.path.expanduser("~/.cache/nexa.ai/nexa_sdk/models/NexaAI/gemma-3n-E4B-it-4bit-MLX/model-00001-of-00002.safetensors")
+
+    # Model configuration
+    m_cfg = ModelConfig()
+
+    # Load model
+    instance: VLM = VLM.from_(name_or_path=model, mmproj_path="", m_cfg=m_cfg, plugin_id="mlx", device_id="")
+
+    conversation: List[MultiModalMessage] = [MultiModalMessage(role="system", content=[MultiModalMessageContent(type="text", text="You are a helpful assistant.")])]
+    strbuff = io.StringIO()
+
+    print("Multi-round conversation started. Type '/quit' or '/exit' to end.")
+    print("=" * 50)
+
+    while True:
+        user_input = input("\nUser: ").strip()
+        if not user_input:
+            print("Please provide an input or type '/quit' to exit.")
+            continue
+
+        if user_input.startswith("/"):
+            cmds = user_input.split()
+            if cmds[0] in {"/quit", "/exit", "/q"}:
+                print("Goodbye!")
+                break
+            elif cmds[0] in {"/save", "/s"}:
+                instance.save_kv_cache(cmds[1])
+                print("KV cache saved to", cmds[1])
+                continue
+            elif cmds[0] in {"/load", "/l"}:
+                instance.load_kv_cache(cmds[1])
+                print("KV cache loaded from", cmds[1])
+                continue
+            elif cmds[0] in {"/reset", "/r"}:
+                instance.reset()
+                print("Conversation reset")
+                continue
+
+        prompt, images, audios = parse_media_from_input(user_input)
+
+        contents = []
+        if prompt:
+            contents.append(MultiModalMessageContent(type="text", text=prompt))
+        if images:
+            for image in images:
+                contents.append(MultiModalMessageContent(type="image", text=image))
+        if audios:
+            for audio in audios:
+                contents.append(MultiModalMessageContent(type="audio", text=audio))
+        conversation.append(MultiModalMessage(role="user", content=contents))
+
+        # Apply the chat template
+        prompt = instance.apply_chat_template(conversation)
+
+        strbuff.truncate(0)
+        strbuff.seek(0)
+
+        print("Assistant: ", end="", flush=True)
+        # Generate the model response
+        for token in instance.generate_stream(prompt, g_cfg=GenerationConfig(max_tokens=100, image_paths=images, audio_paths=audios)):
+            print(token, end="", flush=True)
+            strbuff.write(token)
+
+        # Get profiling data
+        profiling_data = instance.get_profiling_data()
+        if profiling_data is not None:
+            print(profiling_data)
+
+        conversation.append(MultiModalMessage(role="assistant", content=[MultiModalMessageContent(type="text", text=strbuff.getvalue())]))
+
+
+if __name__ == "__main__":
+    main()</doc></examples></project>
