@@ -53,6 +53,7 @@ The generated brief is markdown that mirrors the source material:
 - Overview paragraphs for quick orientation
 - Section-by-section bullets capturing the narrative
 - Key concepts, workflows, pitfalls, and references learners should review
+- A `dspy.Refine` wrapper keeps retrying until the report clears a length reward (defaults scale to ~50% of the source word count, with min/max clamps), so the content tends to be substantially longer than a single LM call.
 
 Behind the scenes the CLI:
 

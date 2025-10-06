@@ -12,17 +12,19 @@ from .signatures import FileOverview, TeachingPoints, TeachingReport
 @dataclass
 class TeachingConfig:
     section_bullet_prefix: str = "- "
-    overview_max_tokens: int = 900
-    teachings_max_tokens: int = 1200
-    report_max_tokens: int = 1500
-    temperature: float | None = 0.35
+    overview_max_tokens: int = 2000
+    teachings_max_tokens: int = 2000
+    report_max_tokens: int = 2000
+    temperature: float | None = 0.7
     top_p: float | None = None
     n_completions: int | None = None
     extra_lm_kwargs: dict[str, Any] = field(default_factory=dict)
     report_refine_attempts: int = 3
     report_reward_threshold: float = 0.8
-    report_target_word_count: int = 650
-    report_min_word_count: int = 450
+    report_min_word_count: int = 400
+    report_max_word_count: int = 2800
+    report_target_ratio: float = 0.5
+    report_soft_cap_ratio: float = 0.8
 
     def lm_args_for(self, scope: str) -> dict[str, Any]:
         """Return per-module LM kwargs without mutating shared config."""
@@ -165,13 +167,32 @@ class FileTeachingAnalyzer(dspy.Module):
 
         if self.config.report_refine_attempts > 1:
 
-            def report_length_reward(_: dict[str, Any], pred: dspy.Prediction) -> float:
+            def report_length_reward(args: dict[str, Any], pred: dspy.Prediction) -> float:
                 text = getattr(pred, "report_markdown", "") or ""
                 words = _word_count(text)
-                if words < self.config.report_min_word_count:
+                source_words = max(int(args.get("source_word_count", 0)), 0)
+
+                dynamic_target = max(
+                    self.config.report_min_word_count,
+                    int(source_words * self.config.report_target_ratio),
+                )
+
+                soft_cap = max(
+                    dynamic_target + 150,
+                    int(source_words * self.config.report_soft_cap_ratio),
+                )
+
+                dynamic_cap = min(self.config.report_max_word_count, soft_cap)
+
+                if words < dynamic_target:
                     return 0.0
-                target = max(self.config.report_target_word_count, 1)
-                return min(1.0, words / target)
+
+                if words >= dynamic_cap:
+                    return 1.0
+
+                span = max(dynamic_cap - dynamic_target, 1)
+                progress = (words - dynamic_target) / span
+                return min(1.0, 0.6 + 0.4 * progress)
 
             self.report = dspy.Refine(
                 module=base_report,
@@ -272,6 +293,8 @@ class FileTeachingAnalyzer(dspy.Module):
             self.config.section_bullet_prefix,
         )
 
+        source_word_count = _word_count(file_content)
+
         report_pred = self.report(
             file_path=file_path,
             overview=overview_text,
@@ -285,6 +308,7 @@ class FileTeachingAnalyzer(dspy.Module):
             code_walkthroughs=code_walkthroughs,
             integration_notes=integration_notes,
             testing_focus=testing_focus,
+            source_word_count=source_word_count,
         )
 
         return dspy.Prediction(
