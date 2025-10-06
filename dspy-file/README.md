@@ -1,4 +1,4 @@
-# DSPy File Analyzer
+# dspyteach – DSPy File Teaching Analyzer
 
 This folder contains a DSPy-powered CLI that analyzes source files (one or many) and produces teaching briefs. Each run captures:
 
@@ -35,18 +35,18 @@ uv pip install -e .
 Run the CLI to extract a teaching brief from a single file:
 
 ```bash
-dspy-file-teaching path/to/your_file
+dspyteach path/to/your_file
 ```
 
 You can also point the CLI at a directory. The tool will recurse by default:
 
 ```bash
-dspy-file-teaching path/to/project --glob "**/*.py" --glob "**/*.md"
+dspyteach path/to/project --glob "**/*.py" --glob "**/*.md"
 ```
 
 Use `--non-recursive` to stay in the top-level directory, add `--glob` repeatedly to narrow the target set, and pass `--raw` to print the raw DSPy prediction object instead of the formatted report.
 
-To change where reports land, supply `--output-dir /path/to/reports`. When omitted the CLI writes to `dspy_file/data/` next to the module. Every run prints the active model name and the resolved output directory before analysis begins so you can confirm the environment at a glance.
+To change where reports land, supply `--output-dir /path/to/reports`. When omitted the CLI writes to `dspy_file/data/` next to the module. Every run prints the active model name and the resolved output directory before analysis begins so you can confirm the environment at a glance. For backwards compatibility the installer also registers `dspy-file-teaching` as an alias.
 
 Each analyzed file is saved under the chosen directory with a slugged name (e.g. `src__main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
 
@@ -73,27 +73,36 @@ Behind the scenes the CLI:
 - Tune `TeachingConfig` inside `file_analyzer.py` to raise `max_tokens`, adjust the `Refine` word-count reward, or add extra LM kwargs.
 - Add more signatures and module stages to capture additional metadata (e.g., security checks) and wire them into `FileAnalyzer`.
 
-## Packaging & Reuse
+## Packaging & Publishing
 
-The project already ships with a `pyproject.toml`. To reuse it elsewhere:
-
-```bash
-# build a wheel and sdist
-uv build  # or: python -m build
-
-# install from the built artifact
-pip install dist/dspy_file_teaching_analyzer-0.1.0-py3-none-any.whl
-```
-
-You can also install directly from a git repository or local path:
+The repository is configured for standard Python packaging via `pyproject.toml` and the `setuptools` backend. A typical release flow with [`uv`](https://docs.astral.sh/uv/guides/package/) looks like:
 
 ```bash
-pip install git+https://github.com/acidicsoil/dspy-file-teaching-analyzer.git
-# or
-pip install /path/to/dspy-file-teaching-analyzer
+# (optional) bump the version before you publish
+uv version --bump patch
+
+# build the source distribution and wheel; artifacts land in ../dist/
+uv build --no-sources
+
+# publish to PyPI (or TestPyPI) once you have an API token
+UV_PUBLISH_TOKEN=... uv publish
 ```
 
-After installation, the `dspy-file-teaching` console script is available in any environment, making it easy to integrate the analyzer into CI jobs or other automation.
+If you want to stage a release first, point `uv publish --index testpypi` at the alternate index configured in `pyproject.toml`.
+
+To install the package from a freshly built artifact:
+
+```bash
+pip install dist/dspyteach-0.1.1-py3-none-any.whl
+```
+
+Once the project is on PyPI, users can install it directly:
+
+```bash
+pip install dspyteach
+```
+
+After installation, the `dspyteach` console script (plus the legacy `dspy-file-teaching` alias) is available in any environment so you can run analyses outside of this repository or integrate the tool into CI jobs.
 
 ## Troubleshooting
 
