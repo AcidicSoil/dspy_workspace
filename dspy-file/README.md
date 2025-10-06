@@ -15,7 +15,7 @@ The implementation mirrors the multi-file tutorial (`tutorials/multi-llmtxt_gene
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.12+
 - DSPy installed in the environment
 - Ollama running locally with the model `hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M` available
 - (Optional) `.env` file for any additional DSPy configuration; `dotenv` is loaded automatically
@@ -56,6 +56,7 @@ The generated brief is markdown that mirrors the source material:
 - Section-by-section bullets capturing the narrative
 - Key concepts, workflows, pitfalls, and references learners should review
 - A `dspy.Refine` wrapper keeps retrying until the report clears a length reward (defaults scale to ~50% of the source word count, with min/max clamps), so the content tends to be substantially longer than a single LM call.
+- If a model cannot honour DSPy's structured-output schema, the CLI prints a `Structured output fallback` notice and heuristically parses the textual response so you still get usable bullets.
 
 Behind the scenes the CLI:
 

@@ -1,8 +1,11 @@
 # file_analyzer.py - DSPy module deriving a learning brief from a single file
 from __future__ import annotations
 
+import json
+import re
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
-from typing import Any, Iterable
+from typing import Any
 
 import dspy
 
@@ -15,7 +18,7 @@ class TeachingConfig:
     overview_max_tokens: int = 2000
     teachings_max_tokens: int = 2000
     report_max_tokens: int = 2000
-    temperature: float | None = 0.7
+    temperature: float | None = 0.3
     top_p: float | None = None
     n_completions: int | None = None
     extra_lm_kwargs: dict[str, Any] = field(default_factory=dict)
@@ -62,34 +65,149 @@ def _ensure_list(
     fallback: str,
     *,
     strip_entries: bool = True,
+    field_name: str | None = None,
 ) -> list[str]:
-    if not values:
-        return _fallback_list(fallback)
+    coerced, used_fallback = _coerce_iterable(values, strip_entries=strip_entries)
 
-    cleaned: list[str] = []
-    for entry in values:
-        if entry is None:
-            continue
-        candidate = entry.rstrip() if not strip_entries else entry.strip()
-        if candidate:
-            cleaned.append(candidate)
+    if coerced:
+        if used_fallback and field_name:
+            _structured_output_notice(field_name)
+        return coerced
 
-    return cleaned or _fallback_list(fallback)
+    if used_fallback and field_name:
+        _structured_output_notice(field_name)
+
+    return _fallback_list(fallback)
 
 
-def _clean_list(values: Iterable[str] | None, *, strip_entries: bool = True) -> list[str]:
+def _clean_list(
+    values: Iterable[str] | None,
+    *,
+    strip_entries: bool = True,
+    field_name: str | None = None,
+) -> list[str]:
     if not values:
         return []
 
-    cleaned: list[str] = []
-    for entry in values:
-        if entry is None:
-            continue
-        candidate = entry.rstrip() if not strip_entries else entry.strip()
-        if candidate:
-            cleaned.append(candidate)
+    coerced, used_fallback = _coerce_iterable(values, strip_entries=strip_entries)
 
-    return cleaned
+    if used_fallback and field_name:
+        _structured_output_notice(field_name)
+
+    return coerced
+
+
+_STRUCTURED_NOTICE_CACHE: set[str] = set()
+
+
+def _structured_output_notice(field: str) -> None:
+    if field in _STRUCTURED_NOTICE_CACHE:
+        return
+    _STRUCTURED_NOTICE_CACHE.add(field)
+    print(
+        f"Structured output fallback applied for '{field}'. Parsed textual response."
+    )
+
+
+_LEADING_MARKER_PATTERN = re.compile(r"^[\s\-\*•·\u2022\d\.\)\(]+")
+
+
+def _coerce_iterable(
+    values: Iterable[str] | None,
+    *,
+    strip_entries: bool,
+) -> tuple[list[str], bool]:
+    if values is None:
+        return [], False
+
+    if isinstance(values, str):
+        return _coerce_string(values, strip_entries=strip_entries), True
+
+    if isinstance(values, Mapping):
+        items: list[str] = []
+        for key, val in values.items():
+            key_text = str(key).strip()
+            val_text = str(val).strip()
+            combined = f"{key_text}: {val_text}" if val_text else key_text
+            candidate = combined.rstrip() if not strip_entries else combined.strip()
+            if candidate:
+                items.append(candidate if strip_entries else candidate.rstrip())
+        return items, True
+
+    if isinstance(values, Iterable):
+        cleaned: list[str] = []
+        used_fallback = not isinstance(values, (list, tuple, set))
+        for entry in values:
+            if entry is None:
+                continue
+            if isinstance(entry, str):
+                candidate = entry.rstrip() if not strip_entries else entry.strip()
+            else:
+                candidate = str(entry).strip()
+            if strip_entries:
+                candidate = _LEADING_MARKER_PATTERN.sub("", candidate).strip()
+            if candidate:
+                cleaned.append(candidate if strip_entries else candidate.rstrip())
+        return cleaned, used_fallback
+
+    return _coerce_string(str(values), strip_entries=strip_entries), True
+
+
+def _coerce_string(value: str, *, strip_entries: bool) -> list[str]:
+    text = value.strip()
+    if not text:
+        return []
+
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        parsed = None
+
+    if isinstance(parsed, list):
+        coerced: list[str] = []
+        for item in parsed:
+            candidate = str(item)
+            candidate = candidate.rstrip() if not strip_entries else candidate.strip()
+            if strip_entries:
+                candidate = _LEADING_MARKER_PATTERN.sub("", candidate).strip()
+            if candidate:
+                coerced.append(candidate if strip_entries else candidate.rstrip())
+        if coerced:
+            return coerced
+    elif isinstance(parsed, Mapping):
+        mapped: list[str] = []
+        for key, val in parsed.items():
+            key_text = str(key).strip()
+            val_text = str(val).strip()
+            candidate = f"{key_text}: {val_text}" if val_text else key_text
+            candidate = candidate.rstrip() if not strip_entries else candidate.strip()
+            if candidate:
+                mapped.append(candidate if strip_entries else candidate.rstrip())
+        if mapped:
+            return mapped
+
+    lines = value.replace("\r", "\n").split("\n")
+    normalized: list[str] = []
+    for raw_line in lines:
+        candidate = raw_line.rstrip() if not strip_entries else raw_line.strip()
+        if strip_entries:
+            candidate = _LEADING_MARKER_PATTERN.sub("", candidate).strip()
+        if candidate:
+            normalized.append(candidate if strip_entries else candidate.rstrip())
+
+    if len(normalized) <= 1:
+        delimiters = [";", "•", "·", " | "]
+        for delimiter in delimiters:
+            if delimiter in value:
+                parts = [part.strip() for part in value.split(delimiter) if part.strip()]
+                if parts:
+                    return [
+                        _LEADING_MARKER_PATTERN.sub("", part).strip()
+                        if strip_entries
+                        else part.rstrip()
+                    ]
+
+    return normalized
 
 
 def _with_prefix(items: Iterable[str], prefix: str) -> list[str]:
@@ -222,6 +340,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(overview_pred, "section_notes", None),
                 "Section-level breakdown unavailable.",
+                field_name="section_notes",
             ),
             self.config.section_bullet_prefix,
         )
@@ -230,6 +349,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "key_concepts", None),
                 "Clarify core concepts manually.",
+                field_name="key_concepts",
             ),
             self.config.section_bullet_prefix,
         )
@@ -238,6 +358,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "practical_steps", None),
                 "Document workflow steps explicitly.",
+                field_name="practical_steps",
             ),
             self.config.section_bullet_prefix,
         )
@@ -246,12 +367,16 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "pitfalls", None),
                 "No pitfalls identified; review source for potential caveats.",
+                field_name="pitfalls",
             ),
             self.config.section_bullet_prefix,
         )
 
         references = _with_prefix(
-            _clean_list(getattr(teaching_pred, "references", None)),
+            _clean_list(
+                getattr(teaching_pred, "references", None),
+                field_name="references",
+            ),
             self.config.section_bullet_prefix,
         )
 
@@ -259,6 +384,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "usage_patterns", None),
                 "Document how this file is applied in real flows.",
+                field_name="usage_patterns",
             ),
             self.config.section_bullet_prefix,
         )
@@ -267,6 +393,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "key_functions", None),
                 "Identify primary interfaces and responsibilities manually.",
+                field_name="key_functions",
             ),
             self.config.section_bullet_prefix,
         )
@@ -275,12 +402,14 @@ class FileTeachingAnalyzer(dspy.Module):
             getattr(teaching_pred, "code_walkthroughs", None),
             "Prepare short code walkthroughs for learners.",
             strip_entries=False,
+            field_name="code_walkthroughs",
         )
 
         integration_notes = _with_prefix(
             _ensure_list(
                 getattr(teaching_pred, "integration_notes", None),
                 "Outline integration touchpoints manually.",
+                field_name="integration_notes",
             ),
             self.config.section_bullet_prefix,
         )
@@ -289,6 +418,7 @@ class FileTeachingAnalyzer(dspy.Module):
             _ensure_list(
                 getattr(teaching_pred, "testing_focus", None),
                 "Highlight testing priorities in a follow-up review.",
+                field_name="testing_focus",
             ),
             self.config.section_bullet_prefix,
         )
