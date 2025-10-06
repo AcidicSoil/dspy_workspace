@@ -10,9 +10,9 @@ import dspy
 from dotenv import load_dotenv
 
 from .file_analyzer import FileTeachingAnalyzer
-from .file_helpers import read_file_content, render_prediction, resolve_file_path
+from .file_helpers import collect_source_paths, read_file_content, render_prediction
 
-MODEL_NAME = "hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M"
+MODEL_NAME = "hf.co/Mungert/Qwen3-4B-Thinking-2507-GGUF:Q4_K_M"
 OLLAMA_BASE_URL = "http://localhost:11434"
 DATA_DIR = Path(__file__).parent / "data"
 
@@ -45,17 +45,26 @@ def stop_ollama_model(model_name: str) -> None:
         print("Warning: ollama command not found while attempting to stop the model.")
 
 
-def _write_output(original_name: str, content: str) -> Path:
+def _write_output(source_path: Path, content: str, *, root: Path | None = None) -> Path:
     """Persist analyzer output under the data directory with de-duplicated file names."""
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
-    stem = Path(original_name).stem
-    base_name = f"{stem}.teaching.md"
+
+    try:
+        relative_path = source_path.relative_to(root) if root else Path(source_path.name)
+    except ValueError:
+        relative_path = Path(source_path.name)
+
+    slug_parts = [part.replace("/", "_") for part in relative_path.with_suffix("").parts]
+    slug = "__".join(slug_parts) if slug_parts else source_path.stem
+    base_name = f"{slug}.teaching.md"
     output_path = DATA_DIR / base_name
+
     counter = 1
     while output_path.exists():
-        output_path = DATA_DIR / f"{stem}.teaching-{counter}.md"
+        output_path = DATA_DIR / f"{slug}.teaching-{counter}.md"
         counter += 1
+
     if not content.endswith("\n"):
         content = content + "\n"
     output_path.write_text(content, encoding="utf-8")
@@ -72,28 +81,69 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print raw DSPy prediction repr instead of formatted text",
     )
+    parser.add_argument(
+        "--non-recursive",
+        action="store_true",
+        help="When path is a directory, only analyze files in the top-level directory",
+    )
+    parser.add_argument(
+        "--glob",
+        action="append",
+        dest="include_globs",
+        default=None,
+        help=(
+            "Optional glob pattern(s) applied relative to the directory. Repeat to combine."
+        ),
+    )
     return parser
 
 
-def analyze_file(path: str, *, raw: bool) -> int:
-    """Run the DSPy pipeline and render results to stdout."""
+def analyze_path(
+    path: str,
+    *,
+    raw: bool,
+    recursive: bool,
+    include_globs: list[str] | None,
+) -> int:
+    """Run the DSPy pipeline and render results to stdout for one or many files."""
 
-    resolved = resolve_file_path(path)
-    content = read_file_content(resolved)
+    resolved = Path(path).expanduser().resolve()
+    targets = collect_source_paths(
+        path,
+        recursive=recursive,
+        include_globs=include_globs,
+    )
+
+    if not targets:
+        print(f"No files found under {resolved}")
+        return 0
 
     analyzer = FileTeachingAnalyzer()
-    prediction = analyzer(file_path=str(resolved), file_content=content)
+    root: Path | None = resolved if resolved.is_dir() else None
 
-    if raw:
-        output_text = repr(prediction)
-        print(output_text)
-    else:
-        output_text = render_prediction(prediction)
-        print(output_text, end="")
+    exit_code = 0
+    for target in targets:
+        try:
+            content = read_file_content(target)
+        except (FileNotFoundError, UnicodeDecodeError) as exc:
+            print(f"Skipping {target}: {exc}")
+            exit_code = 1
+            continue
 
-    output_path = _write_output(resolved.name, output_text)
-    print(f"Saved report to {output_path}")
-    return 0
+        print(f"\n=== Analyzing {target} ===")
+        prediction = analyzer(file_path=str(target), file_content=content)
+
+        if raw:
+            output_text = repr(prediction)
+            print(output_text)
+        else:
+            output_text = render_prediction(prediction)
+            print(output_text, end="")
+
+        output_path = _write_output(target, output_text, root=root)
+        print(f"Saved report to {output_path}")
+
+    return exit_code
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -105,7 +155,12 @@ def main(argv: list[str] | None = None) -> int:
 
     exit_code = 0
     try:
-        exit_code = analyze_file(args.path, raw=args.raw)
+        exit_code = analyze_path(
+            args.path,
+            raw=args.raw,
+            recursive=not args.non_recursive,
+            include_globs=args.include_globs,
+        )
     except (FileNotFoundError, IsADirectoryError) as exc:
         parser.print_usage(sys.stderr)
         print(f"{parser.prog}: error: {exc}", file=sys.stderr)

@@ -42,12 +42,16 @@ Ensure the Ollama server is running and the model is pulled:
 ollama pull hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
 ```
 
+```bash
+uv pip install -e .
+```
+
 ## Usage
 
 Run the CLI to extract a teaching brief from a file:
 
 ```bash
-python -m dspy_file.analyze_file_cli path/to/your_file.py
+dspy-file-teaching path/to/your_file
 ```
 
 Flags:

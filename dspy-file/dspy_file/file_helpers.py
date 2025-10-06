@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Iterable
 
 import dspy
 
@@ -15,6 +16,36 @@ def resolve_file_path(raw_path: str) -> Path:
     if not path.is_file():
         raise IsADirectoryError(f"Expected a file path but received: {path}")
     return path
+
+
+def collect_source_paths(
+    raw_path: str,
+    *,
+    recursive: bool = True,
+    include_globs: Iterable[str] | None = None,
+) -> list[Path]:
+    """Resolve a single file or directory into an ordered list of file paths."""
+
+    path = Path(raw_path).expanduser().resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"Target not found: {path}")
+
+    if path.is_file():
+        return [path]
+
+    if not path.is_dir():
+        raise IsADirectoryError(f"Expected file or directory path but received: {path}")
+
+    patterns = list(include_globs or ["**/*" if recursive else "*"])
+
+    candidates: set[Path] = set()
+    for pattern in patterns:
+        matched = path.glob(pattern)
+        for candidate in matched:
+            if candidate.is_file():
+                candidates.add(candidate.resolve())
+
+    return sorted(candidates)
 
 
 def _strip_front_matter(text: str) -> str:
