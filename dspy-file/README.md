@@ -8,10 +8,10 @@ This folder contains a small DSPy program that analyzes a single file and produc
 
 The implementation mirrors the multi-file tutorial (`tutorials/multi-llmtxt_generator`) but focuses on per-file inference. The program is split into:
 
-- `signatures.py` – DSPy signatures that define inputs/outputs for each step
-- `file_analyzer.py` – the main DSPy module that orchestrates overview, teaching extraction, and report composition
-- `file_helpers.py` – utilities for loading files and rendering the markdown brief
-- `analyze_file_cli.py` – command line entry point that configures the local model and prints results
+- `dspy_file/signatures.py` – DSPy signatures that define inputs/outputs for each step
+- `dspy_file/file_analyzer.py` – the main DSPy module that orchestrates overview, teaching extraction, and report composition
+- `dspy_file/file_helpers.py` – utilities for loading files and rendering the markdown brief
+- `dspy_file/analyze_file_cli.py` – command line entry point that configures the local model and prints results
 
 ## Requirements
 
@@ -32,12 +32,16 @@ Ensure the Ollama server is running and the model is pulled:
 ollama pull hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
 ```
 
+```bash
+uv pip install -e .
+```
+
 ## Usage
 
 Run the CLI to extract a teaching brief from a file:
 
 ```bash
-python analyze_file_cli.py path/to/your_file.py
+dspy-file-teaching path/to/your_file
 ```
 
 Flags:
@@ -47,10 +51,10 @@ Flags:
 Example:
 
 ```bash
-python analyze_file_cli.py ../some_project/app/main.py
+python -m dspy_file.analyze_file_cli ../some_project/app/main.py
 ```
 
-Each run also saves the report under `data/` named after the analyzed file (e.g. `main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
+Each run also saves the report under `dspy_file/data/` named after the analyzed file (e.g. `main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
 
 The generated brief is markdown that mirrors the source material:
 
@@ -63,13 +67,13 @@ Behind the scenes the CLI:
 1. Loads environment variables via `python-dotenv`.
 2. Configures DSPy with the same local Ollama model used in the tutorial.
 3. Reads the file contents, runs the DSPy `FileTeachingAnalyzer` module, and prints a human-friendly report.
-4. Persists the report to the `data/` directory so results are easy to revisit.
+4. Persists the report to the `dspy_file/data/` directory so results are easy to revisit.
 5. Attempts to stop the Ollama model when finished, mirroring the fail-safe logic from the tutorial.
 
 ## Extending
 
-- Adjust the `TeachingReport` signature or add new chains in `file_analyzer.py` to capture additional teaching metadata.
-- Customize the render logic in `file_helpers.render_prediction` if you want richer CLI output or structured JSON.
+- Adjust the `TeachingReport` signature or add new chains in `dspy_file/file_analyzer.py` to capture additional teaching metadata.
+- Customize the render logic in `dspy_file.file_helpers.render_prediction` if you want richer CLI output or structured JSON.
 - Add more signatures and module stages to capture additional metadata (e.g., security checks) and wire them into `FileAnalyzer`.
 
 ## Troubleshooting

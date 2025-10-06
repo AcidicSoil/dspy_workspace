@@ -56,5 +56,10 @@ select = ["E", "F", "I", "B"]
 [tool.pytest.ini_options]
 addopts = "-ra"
 
+[tool.uv.workspace]
+members = [
+    "dspy-file",
+]
+
 [tool.hatch.metadata]
 allow-direct-references = true

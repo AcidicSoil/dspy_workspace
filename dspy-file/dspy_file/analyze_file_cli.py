@@ -9,8 +9,8 @@ from pathlib import Path
 import dspy
 from dotenv import load_dotenv
 
-from file_analyzer import FileTeachingAnalyzer
-from file_helpers import read_file_content, render_prediction, resolve_file_path
+from .file_analyzer import FileTeachingAnalyzer
+from .file_helpers import read_file_content, render_prediction, resolve_file_path
 
 MODEL_NAME = "hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M"
 OLLAMA_BASE_URL = "http://localhost:11434"
@@ -56,9 +56,9 @@ def _write_output(original_name: str, content: str) -> Path:
     while output_path.exists():
         output_path = DATA_DIR / f"{stem}.teaching-{counter}.md"
         counter += 1
-    if not content.endswith('\n'):
-        content = content + '\n'
-    output_path.write_text(content, encoding='utf-8')
+    if not content.endswith("\n"):
+        content = content + "\n"
+    output_path.write_text(content, encoding="utf-8")
     return output_path
 
 

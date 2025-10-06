@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import dspy
 
-from signatures import FileOverview, TeachingPoints, TeachingReport
+from .signatures import FileOverview, TeachingPoints, TeachingReport
 
 
 @dataclass

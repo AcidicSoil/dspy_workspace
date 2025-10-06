@@ -17,13 +17,34 @@ def resolve_file_path(raw_path: str) -> Path:
     return path
 
 
+def _strip_front_matter(text: str) -> str:
+    if not text.startswith("---"):
+        return text
+    end_idx = text.find("\n---", 3)
+    if end_idx == -1:
+        return text
+    return text[end_idx + 4 :]
+
+
+def _trim_to_first_heading(text: str) -> str:
+    lines = text.splitlines()
+    for idx, line in enumerate(lines):
+        if line.lstrip().startswith("#"):
+            return "\n".join(lines[idx:])
+    return text
+
+
 def read_file_content(path: Path) -> str:
     """Read file contents using utf-8 and fall back to latin-1 if needed."""
 
     try:
-        return path.read_text(encoding="utf-8")
+        raw = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
-        return path.read_text(encoding="latin-1")
+        raw = path.read_text(encoding="latin-1")
+
+    cleaned = _strip_front_matter(raw)
+    cleaned = _trim_to_first_heading(cleaned)
+    return cleaned
 
 
 def render_prediction(result: dspy.Prediction) -> str:
