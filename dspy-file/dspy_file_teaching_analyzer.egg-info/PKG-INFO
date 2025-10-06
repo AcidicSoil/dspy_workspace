@@ -10,7 +10,7 @@ Requires-Dist: python-dotenv>=1.0
 
 # DSPy File Analyzer
 
-This folder contains a small DSPy program that analyzes a single file and produces a structured report covering:
+This folder contains a DSPy-powered CLI that analyzes source files (one or many) and produces teaching briefs. Each run captures:
 
 - an overview of the file and its major sections
 - key teaching points, workflows, and pitfalls highlighted in the material
@@ -19,9 +19,9 @@ This folder contains a small DSPy program that analyzes a single file and produc
 The implementation mirrors the multi-file tutorial (`tutorials/multi-llmtxt_generator`) but focuses on per-file inference. The program is split into:
 
 - `dspy_file/signatures.py` – DSPy signatures that define inputs/outputs for each step
-- `dspy_file/file_analyzer.py` – the main DSPy module that orchestrates overview, teaching extraction, and report composition
+- `dspy_file/file_analyzer.py` – the main DSPy module that orchestrates overview, teaching extraction, and report composition. It now wraps the final report stage with `dspy.Refine`, pushing for 450–650+ word briefs.
 - `dspy_file/file_helpers.py` – utilities for loading files and rendering the markdown brief
-- `dspy_file/analyze_file_cli.py` – command line entry point that configures the local model and prints results
+- `dspy_file/analyze_file_cli.py` – command line entry point that configures the local model and prints results. It can walk directories, apply glob filters, and batch-generate briefs.
 
 ## Requirements
 
@@ -33,38 +33,30 @@ The implementation mirrors the multi-file tutorial (`tutorials/multi-llmtxt_gene
 Install the Python dependencies if you have not already:
 
 ```bash
-uv pip install dspy dotenv
-```
-
-Ensure the Ollama server is running and the model is pulled:
-
-```bash
+uv pip install dspy python-dotenv
 ollama pull hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
-```
 
-```bash
+# install the package locally (editable or regular)
 uv pip install -e .
 ```
 
 ## Usage
 
-Run the CLI to extract a teaching brief from a file:
+Run the CLI to extract a teaching brief from a single file:
 
 ```bash
 dspy-file-teaching path/to/your_file
 ```
 
-Flags:
-
-- `--raw` prints the raw DSPy prediction object instead of the formatted text report.
-
-Example:
+You can also point the CLI at a directory. The tool will recurse by default:
 
 ```bash
-python -m dspy_file.analyze_file_cli ../some_project/app/main.py
+dspy-file-teaching path/to/project --glob "**/*.py" --glob "**/*.md"
 ```
 
-Each run also saves the report under `dspy_file/data/` named after the analyzed file (e.g. `main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
+Use `--non-recursive` to stay in the top-level directory, add `--glob` repeatedly to narrow the target set, and pass `--raw` to print the raw DSPy prediction object instead of the formatted report.
+
+Each analyzed file is saved under `dspy_file/data/` with a slugged name (e.g. `src__main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
 
 The generated brief is markdown that mirrors the source material:
 
@@ -76,15 +68,38 @@ Behind the scenes the CLI:
 
 1. Loads environment variables via `python-dotenv`.
 2. Configures DSPy with the same local Ollama model used in the tutorial.
-3. Reads the file contents, runs the DSPy `FileTeachingAnalyzer` module, and prints a human-friendly report.
-4. Persists the report to the `dspy_file/data/` directory so results are easy to revisit.
+3. Resolves all requested files, reads contents, runs the DSPy `FileTeachingAnalyzer` module, and prints a human-friendly report for each.
+4. Persists each report to the `dspy_file/data/` directory so results are easy to revisit.
 5. Attempts to stop the Ollama model when finished, mirroring the fail-safe logic from the tutorial.
 
 ## Extending
 
 - Adjust the `TeachingReport` signature or add new chains in `dspy_file/file_analyzer.py` to capture additional teaching metadata.
 - Customize the render logic in `dspy_file.file_helpers.render_prediction` if you want richer CLI output or structured JSON.
+- Tune `TeachingConfig` inside `file_analyzer.py` to raise `max_tokens`, adjust the `Refine` word-count reward, or add extra LM kwargs.
 - Add more signatures and module stages to capture additional metadata (e.g., security checks) and wire them into `FileAnalyzer`.
+
+## Packaging & Reuse
+
+The project already ships with a `pyproject.toml`. To reuse it elsewhere:
+
+```bash
+# build a wheel and sdist
+uv build  # or: python -m build
+
+# install from the built artifact
+pip install dist/dspy_file_teaching_analyzer-0.1.0-py3-none-any.whl
+```
+
+You can also install directly from a git repository or local path:
+
+```bash
+pip install git+https://github.com/your-org/dspy-file-teaching-analyzer.git
+# or
+pip install /path/to/dspy-file-teaching-analyzer
+```
+
+After installation, the `dspy-file-teaching` console script is available in any environment, making it easy to integrate the analyzer into CI jobs or other automation.
 
 ## Troubleshooting
 
