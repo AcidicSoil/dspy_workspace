@@ -1,0 +1,6 @@
+/logs/
+/temp/
+/example-data/
+*.env
+.venv/
+AGENTS.md

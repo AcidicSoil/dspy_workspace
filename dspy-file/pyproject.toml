@@ -28,6 +28,9 @@ dspy-file-teaching = "dspy_file.analyze_file_cli:main"
 [tool.setuptools.packages.find]
 include = ["dspy_file", "dspy_file.*"]
 
+[tool.uv]
+trusted-publishing = "always"
+
 [[tool.uv.index]]
 name = "testpypi"
 url = "https://test.pypi.org/simple/"

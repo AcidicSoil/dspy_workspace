@@ -104,6 +104,17 @@ pip install dspyteach
 
 After installation, the `dspyteach` console script (plus the legacy `dspy-file-teaching` alias) is available in any environment so you can run analyses outside of this repository or integrate the tool into CI jobs.
 
+### CI Publishing
+
+GitHub Actions users can trigger `.github/workflows/publish-testpypi.yml` to build and push the current checkout to TestPyPI. The workflow:
+
+- Checks out the repository (ensuring `pyproject.toml` is present as required by uv publish).
+- Installs uv with Python 3.12.
+- Runs `uv build --no-sources` inside `dspy-file/`.
+- Publishes with `uv publish --index testpypi dist/*` using the `TEST_PYPI_TOKEN` secret.
+
+See the [uv publishing guide](https://docs.astral.sh/uv/guides/package/#publishing-your-package) for the official note about requiring a checkout when using `--index`.
+
 ## Troubleshooting
 
 - If the program cannot connect to Ollama, verify that the server is running on `http://localhost:11434` and the requested model has been pulled.
