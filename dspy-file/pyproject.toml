@@ -1,6 +1,6 @@
 [project]
 name = "dspy-file-teaching-analyzer"
-version = "0.1.0"
+version = "0.1.1"
 description = "CLI utility that summarizes single files into teaching briefs using DSPy"
 authors = [{ name = "Your Name", email = "you@example.com" }]
 readme = "README.md"

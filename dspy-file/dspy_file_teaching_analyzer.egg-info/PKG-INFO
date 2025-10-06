@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dspy-file-teaching-analyzer
-Version: 0.1.0
+Version: 0.1.1
 Summary: CLI utility that summarizes single files into teaching briefs using DSPy
 Author-email: Your Name <you@example.com>
 Requires-Python: >=3.12
