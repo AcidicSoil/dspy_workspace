@@ -56,7 +56,9 @@ dspy-file-teaching path/to/project --glob "**/*.py" --glob "**/*.md"
 
 Use `--non-recursive` to stay in the top-level directory, add `--glob` repeatedly to narrow the target set, and pass `--raw` to print the raw DSPy prediction object instead of the formatted report.
 
-Each analyzed file is saved under `dspy_file/data/` with a slugged name (e.g. `src__main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
+To change where reports land, supply `--output-dir /path/to/reports`. When omitted the CLI writes to `dspy_file/data/` next to the module. Every run prints the active model name and the resolved output directory before analysis begins so you can confirm the environment at a glance.
+
+Each analyzed file is saved under the chosen directory with a slugged name (e.g. `src__main.teaching.md`). If a file already exists, the CLI appends a numeric suffix to avoid overwriting previous runs.
 
 The generated brief is markdown that mirrors the source material:
 
@@ -70,7 +72,7 @@ Behind the scenes the CLI:
 1. Loads environment variables via `python-dotenv`.
 2. Configures DSPy with the same local Ollama model used in the tutorial.
 3. Resolves all requested files, reads contents, runs the DSPy `FileTeachingAnalyzer` module, and prints a human-friendly report for each.
-4. Persists each report to the `dspy_file/data/` directory so results are easy to revisit.
+4. Persists each report to the configured output directory so results are easy to revisit.
 5. Attempts to stop the Ollama model when finished, mirroring the fail-safe logic from the tutorial.
 
 ## Extending

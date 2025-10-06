@@ -14,7 +14,7 @@ from .file_helpers import collect_source_paths, read_file_content, render_predic
 
 MODEL_NAME = "hf.co/lmstudio-community/granite-4.0-h-tiny-GGUF:Q4_K_M"
 OLLAMA_BASE_URL = "http://localhost:11434"
-DATA_DIR = Path(__file__).parent / "data"
+DEFAULT_OUTPUT_DIR = Path(__file__).parent / "data"
 
 
 def configure_local_model() -> None:
@@ -28,6 +28,7 @@ def configure_local_model() -> None:
         cache=False,
     )
     dspy.configure(lm=lm)
+    print(f"Configured DSPy LM: {MODEL_NAME}")
 
 
 def stop_ollama_model(model_name: str) -> None:
@@ -45,10 +46,16 @@ def stop_ollama_model(model_name: str) -> None:
         print("Warning: ollama command not found while attempting to stop the model.")
 
 
-def _write_output(source_path: Path, content: str, *, root: Path | None = None) -> Path:
+def _write_output(
+    source_path: Path,
+    content: str,
+    *,
+    root: Path | None = None,
+    output_dir: Path = DEFAULT_OUTPUT_DIR,
+) -> Path:
     """Persist analyzer output under the data directory with de-duplicated file names."""
 
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     try:
         relative_path = source_path.relative_to(root) if root else Path(source_path.name)
@@ -58,11 +65,11 @@ def _write_output(source_path: Path, content: str, *, root: Path | None = None) 
     slug_parts = [part.replace("/", "_") for part in relative_path.with_suffix("").parts]
     slug = "__".join(slug_parts) if slug_parts else source_path.stem
     base_name = f"{slug}.teaching.md"
-    output_path = DATA_DIR / base_name
+    output_path = output_dir / base_name
 
     counter = 1
     while output_path.exists():
-        output_path = DATA_DIR / f"{slug}.teaching-{counter}.md"
+        output_path = output_dir / f"{slug}.teaching-{counter}.md"
         counter += 1
 
     if not content.endswith("\n"):
@@ -95,6 +102,14 @@ def build_parser() -> argparse.ArgumentParser:
             "Optional glob pattern(s) applied relative to the directory. Repeat to combine."
         ),
     )
+    parser.add_argument(
+        "--output-dir",
+        dest="output_dir",
+        default=None,
+        help=(
+            "Directory to write teaching reports into (default: module data directory)."
+        ),
+    )
     return parser
 
 
@@ -104,6 +119,7 @@ def analyze_path(
     raw: bool,
     recursive: bool,
     include_globs: list[str] | None,
+    output_dir: Path,
 ) -> int:
     """Run the DSPy pipeline and render results to stdout for one or many files."""
 
@@ -140,7 +156,12 @@ def analyze_path(
             output_text = render_prediction(prediction)
             print(output_text, end="")
 
-        output_path = _write_output(target, output_text, root=root)
+        output_path = _write_output(
+            target,
+            output_text,
+            root=root,
+            output_dir=output_dir,
+        )
         print(f"Saved report to {output_path}")
 
     return exit_code
@@ -155,11 +176,18 @@ def main(argv: list[str] | None = None) -> int:
 
     exit_code = 0
     try:
+        output_dir = (
+            Path(args.output_dir).expanduser().resolve()
+            if args.output_dir
+            else DEFAULT_OUTPUT_DIR
+        )
+        print(f"Writing reports to {output_dir}")
         exit_code = analyze_path(
             args.path,
             raw=args.raw,
             recursive=not args.non_recursive,
             include_globs=args.include_globs,
+            output_dir=output_dir,
         )
     except (FileNotFoundError, IsADirectoryError) as exc:
         parser.print_usage(sys.stderr)
