@@ -85,7 +85,7 @@ pip install dist/dspy_file_teaching_analyzer-0.1.0-py3-none-any.whl
 You can also install directly from a git repository or local path:
 
 ```bash
-pip install git+https://github.com/your-org/dspy-file-teaching-analyzer.git
+pip install git+https://github.com/acidicsoil/dspy-file-teaching-analyzer.git
 # or
 pip install /path/to/dspy-file-teaching-analyzer
 ```
