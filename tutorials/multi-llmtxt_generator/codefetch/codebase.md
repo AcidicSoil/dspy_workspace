@@ -7,6 +7,8 @@ Project Structure:
 │   ├── repository_analyzer.cpython-313.pyc
 │   ├── signatures.cpython-312.pyc
 │   └── signatures.cpython-313.pyc
+├── codefetch
+│   └── codebase.md
 ├── generate_llms.py
 ├── interactive_generate_llms_py_dynamic_names_owner_repo_dirs.py
 ├── repo_helpers.py

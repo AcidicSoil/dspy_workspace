@@ -1,5 +1,0 @@
-dspy
-openai
-pydantic
-litellm
-vllm
