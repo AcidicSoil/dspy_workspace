@@ -1,0 +1,46 @@
+{
+  "library_info": {
+    "library": "",
+    "source_urls": [
+      "https://lmstudio.ai/docs/typescript/plugins"
+    ],
+    "core_concepts": [
+      "Plugins",
+      "Tools Providers",
+      "Prompt Preprocessors",
+      "Generators",
+      "Custom Configurations",
+      "Third-Party Dependencies"
+    ],
+    "patterns": [
+      "Creating new plugin projects with development mode",
+      "Running plugins in development mode using `lms dev` command",
+      "Distributing and installing plugins for community sharing"
+    ],
+    "methods": [
+      "act() (for agent interactions)",
+      "toolDefinition (for creating tools models can use)"
+    ],
+    "installation": "LM Studio includes Node.js, so no separate installation is needed. To run a plugin in development mode: `lms dev` (in the plugin directory).",
+    "examples": [
+      "lms dev",
+      "The .act() call"
+    ]
+  },
+  "examples": [
+    {
+      "use_case": "creating a custom lm-studio plugin for local llms",
+      "code": "from lmstudio import Plugin\n\nclass LocalLLMPlugin(Plugin):\n    def act(self, context: dict) -> dict:\n        return {\n            \"tool\": \"local_llm\",\n            \"content\": \"This is a custom plugin for local LLMs.\"\n        }\n\n    def toolDefinition(self):\n        return {\n            \"name\": \"local_llm\",\n            \"description\": \"Interact with local LLMs\",\n            \"parameters\": {}\n        }",
+      "explanation": "The code defines a class `LocalLLMPlugin` that inherits from the LM Studio Plugin base class. The `act()` method returns a tool call for interacting with local LLMs, and the `toolDefinition()` method specifies the tool's name, description, and parameters. This plugin can be run in development mode using `lms dev` to interact with local LLMs.",
+      "best_practices": [
+        "Use clear and descriptive names for tools and their actions",
+        "Keep tool definitions simple and focused on specific tasks",
+        "Test plugins in development mode before deploying them to ensure they work correctly",
+        "Document your plugin's functionality and parameters for community sharing"
+      ],
+      "imports": [
+        "from lmstudio import Plugin"
+      ]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ mlruns/
 
 # Python virtual environment
 **/.venv/
-
+*.learning.json
 # Misc. workspaces
 /other
 *:Zone.Identifier

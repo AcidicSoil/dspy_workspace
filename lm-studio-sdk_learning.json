@@ -1,0 +1,58 @@
+{
+  "library_info": {
+    "library": "lm-studio-sdk",
+    "source_urls": [
+      "https://lmstudio.ai/docs/typescript/plugins/custom-configuration/defining-new-fields",
+      "https://lmstudio.ai/docs/typescript/plugins"
+    ],
+    "core_concepts": [
+      "Custom Configuration Fields",
+      "LLM Prediction Configurations",
+      "Plugin Development",
+      "Model Management",
+      "Agentic Flows",
+      "Tool Definitions",
+      "Prompt Preprocessing",
+      "Generators",
+      "Tools Providers"
+    ],
+    "patterns": [
+      "Defining custom fields with specific types (string, numeric, boolean, etc.)",
+      "Using .field() method to create UI elements for configurations",
+      "Integrating plugins with LM Studio's development and deployment workflows",
+      "Managing models through LM Studio's API and CLI",
+      "Implementing agentic flows with .act() and tool definitions"
+    ],
+    "methods": [
+      ".field() for creating configuration fields",
+      ".act() for agentic flows",
+      "lms dev for development mode",
+      "Model loading and management APIs",
+      "Plugin sharing and publishing functions"
+    ],
+    "installation": "Install LM Studio and use the 'lms dev' command for development. Plugins are distributed via the LM Studio platform.",
+    "examples": [
+      "const config = {\n  stringField: 'default value',\n  selectField: 'option1',\n  stringArrayField: ['item1', 'item2']\n};",
+      ".field(\n  'stringField',\n  'string',\n  { subtitle: 'Enter a string' }\n);",
+      ".field(\n  'selectField',\n  'select',\n  {\n    options: [\n      { value: 'option1', displayName: 'Option 1' },\n      { value: 'option2', displayName: 'Option 2' }\n    ]\n  }\n);",
+      "lms dev // Run in development mode",
+      "const modelConfig = {\n  model: 'lmstudio-community/llama3:latest',\n  parameters: { temperature: 0.7 }\n};"
+    ]
+  },
+  "examples": [
+    {
+      "use_case": "creating custom plugins for lm-studio llms",
+      "code": "from lm_studio_sdk import LMStudioSDK\n\n# Initialize the LM Studio SDK\nsdk = LMStudioSDK()\n\n# Define a custom plugin\nclass MyCustomPlugin:\n    def __init__(self):\n        # Define a custom configuration field\n        self.config = sdk.field(\n            name='my_field',\n            type='string',\n            description='A custom field for the plugin'\n        )\n\n    def act(self, input):\n        # Use the custom field value\n        return f\"Processed with value: {input.get(self.config.name)}\"\n\n# Register the plugin with LM Studio\nsdk.register_plugin(MyCustomPlugin())",
+      "explanation": "The code initializes the LM Studio SDK, defines a custom plugin with a string field, and implements an act method that uses the field. The plugin is then registered with LM Studio. This demonstrates how to create and register a custom plugin using the library's features.",
+      "best_practices": [
+        "Use descriptive names for configuration fields to ensure clarity.",
+        "Leverage the .field() method to define UI elements for configurations.",
+        "Test plugins in development mode using 'lms dev' before deployment.",
+        "Follow LM Studio's plugin sharing guidelines for distribution."
+      ],
+      "imports": [
+        "from lm_studio_sdk import LMStudioSDK"
+      ]
+    }
+  ]
+}

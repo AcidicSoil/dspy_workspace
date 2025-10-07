@@ -25,10 +25,8 @@ jobs:
 
       - name: Build distributions
         run: uv build --no-sources
-        working-directory: dspy-file
 
       - name: Publish to TestPyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
         run: uv publish --index testpypi dist/*
-        working-directory: dspy-file

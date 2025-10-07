@@ -9,88 +9,24 @@ import html2text
 from typing import List, Dict, Any
 import json
 import time
+import subprocess
 
 # Import the GitHub helper functions
 from repo_helpers import gather_repository_info
 
-# --- DSPy Configuration ---
-# Replace with your actual LM provider if not using a local one
-    # For models like Llama
-lm = dspy.LM(
-        "ollama_chat/hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M",
-        api_base="http://localhost:11434",  # Local Ollama server URL
-        api_key="EMPTY",  # Usually empty for local Ollama; remove if you do not have a key
-        streaming=False,
-        response_format={
-            "type": "json_schema",
-            "json_schema": {
-                "schema": {
-                    "type": "object",
-                    "properties": {
-                        "project": {
-                            "type": "object",
-                            "properties": {
-                                "name": {"type": "string"},
-                                "description": {"type": "string"},
-                            },
-                            "required": ["name", "description"],
-                        },
-                        "key_concepts": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "minItems": 1,
-                        },
-                        "architecture_overview": {"type": "string"},
-                        "important_directories": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "minItems": 1,
-                        },
-                        "entry_points": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "minItems": 1,
-                        },
-                        "development_info": {
-                            "type": "object",
-                            "properties": {
-                                "test_dependencies": {
-                                    "type": "array",
-                                    "items": {"type": "string"},
-                                    "minItems": 1,
-                                },
-                                "linting_tools": {
-                                    "type": "array",
-                                    "items": {"type": "string"},
-                                    "minItems": 1,
-                                },
-                                "optional_dependencies": {
-                                    "type": "array",
-                                    "items": {"type": "string"},
-                                },
-                            },
-                            "required": ["test_dependencies", "linting_tools"],
-                        },
-                        "usage_examples": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "minItems": 1,
-                        },
-                    },
-                    "required": [
-                        "project",
-                        "key_concepts",
-                        "architecture_overview",
-                        "important_directories",
-                        "entry_points",
-                        "development_info",
-                        "usage_examples",
-                    ],
-                }
-            },
-        },
-    )
-dspy.configure(lm=lm)
+MODEL_NAME = "hf.co/unsloth/Qwen3-4B-Thinking-2507-GGUF:Q4_K_M"
+
+
+def stop_ollama_model(model_name: str) -> None:
+    """Stop the specified Ollama model to free server resources."""
+    try:
+        subprocess.run(
+            ["ollama", "stop", model_name],
+            check=True,
+            capture_output=True,
+        )
+    except subprocess.CalledProcessError as exc:  # pragma: no cover - log warning only
+        print(f"Warning: Failed to stop model {model_name}: {exc}")
 
 
 # --- Data Fetching Classes ---
@@ -301,120 +237,129 @@ class DocumentationLearningAgent(dspy.Module):
             "imports": code_result.imports_needed,
         }
 
-
-# --- Interactive Session Logic ---
-
-
 def interactive_learning_session():
     """Main interactive session for the library learning system."""
-    print("🎯 Welcome to the Interactive Library Learning System!")
-    print("This system now supports learning from websites AND GitHub repositories.\n")
+    lm = dspy.LM(
+        f"ollama_chat/{MODEL_NAME}",
+        api_base="http://localhost:11434",
+        api_key="",
+        streaming=False,
+        cache=False,
+    )
+    dspy.configure(lm=lm)
 
-    agent = DocumentationLearningAgent()
     learned_libraries = {}
 
-    while True:
-        print("\n" + "=" * 60)
-        library_name = input(
-            "\n📚 Enter the library name (or 'quit' to exit): "
-        ).strip()
-        if library_name.lower() in ["quit", "exit", "q"]:
-            break
+    try:
+        print("🎯 Welcome to the Interactive Library Learning System!")
+        print("This system now supports learning from websites AND GitHub repositories.\n")
 
-        print(
-            f"\n🔗 Enter documentation URLs or a GitHub repo URL for {library_name} (one per line, empty line to finish):"
-        )
-        urls = []
+        agent = DocumentationLearningAgent()
+
         while True:
-            url = input("  URL: ").strip()
-            if not url:
+            print("\n" + "=" * 60)
+            library_name = input(
+                "\n📚 Enter the library name (or 'quit' to exit): "
+            ).strip()
+            if library_name.lower() in ["quit", "exit", "q"]:
                 break
-            urls.append(url)
 
-        if not urls:
-            continue
-
-        try:
-            # Step 1: Learn about the library from the provided sources
-            library_info = agent.learn_from_urls(library_name, urls)
-            print(f"\n✅ Successfully learned {library_name}!")
-            print(f"   - Core Concepts: {library_info.get('core_concepts', 'N/A')}")
-            print(f"   - Installation: {library_info.get('installation', 'N/A')}")
-
-            # Step 2: Get all use cases from the user upfront
             print(
-                f"\n🎯 Define use cases for {library_name} (one per line, empty line to finish):"
+                f"\n🔗 Enter documentation URLs or a GitHub repo URL for {library_name} (one per line, empty line to finish):"
             )
-            use_cases = []
+            urls = []
             while True:
-                use_case = input("     Use case: ").strip()
-                if not use_case:
+                url = input("  URL: ").strip()
+                if not url:
                     break
-                use_cases.append(use_case)
+                urls.append(url)
 
-            if not use_cases:
-                print("No use cases provided. Moving on.")
+            if not urls:
                 continue
 
-            # Step 3: Generate and display all examples
-            print(f"\n🔧 Generating {len(use_cases)} examples for {library_name}...")
-            all_examples = []
-            for i, use_case in enumerate(use_cases, 1):
-                print(f"\n--- EXAMPLE {i}/{len(use_cases)}: {use_case} ---")
+            try:
+                # Step 1: Learn about the library from the provided sources
+                library_info = agent.learn_from_urls(library_name, urls)
+                print(f"\n✅ Successfully learned {library_name}!")
+                print(f"   - Core Concepts: {library_info.get('core_concepts', 'N/A')}")
+                print(f"   - Installation: {library_info.get('installation', 'N/A')}")
 
-                example = agent.generate_example(library_info, use_case)
-                all_examples.append({"use_case": use_case, **example})
+                # Step 2: Get all use cases from the user upfront
+                print(
+                    f"\n🎯 Define use cases for {library_name} (one per line, empty line to finish):"
+                )
+                use_cases = []
+                while True:
+                    use_case = input("     Use case: ").strip()
+                    if not use_case:
+                        break
+                    use_cases.append(use_case)
 
-                print("\n💻 Code Example:")
-                print(f"```python\n{example['code']}\n```")
+                if not use_cases:
+                    print("No use cases provided. Moving on.")
+                    continue
 
-                print("\n📦 Required Imports:")
-                print("\n".join([f"  • {imp}" for imp in example["imports"]]))
+                # Step 3: Generate and display all examples
+                print(f"\n🔧 Generating {len(use_cases)} examples for {library_name}...")
+                all_examples = []
+                for i, use_case in enumerate(use_cases, 1):
+                    print(f"\n--- EXAMPLE {i}/{len(use_cases)}: {use_case} ---")
 
-                print("\n📝 Explanation:")
-                print(example["explanation"])
+                    example = agent.generate_example(library_info, use_case)
+                    all_examples.append({"use_case": use_case, **example})
 
-                print("\n✅ Best Practices:")
-                print("\n".join([f"  • {bp}" for bp in example["best_practices"]]))
-                print("--- END OF EXAMPLE ---")
+                    print("\n💻 Code Example:")
+                    print(f"```python\n{example['code']}\n```")
 
-            # Store the complete results
-            learned_libraries[library_name] = {
-                "library_info": library_info,
-                "examples": all_examples,
-            }
+                    print("\n📦 Required Imports:")
+                    print("\n".join([f"  • {imp}" for imp in example["imports"]]))
 
-            # Step 4: Offer to save the results to a file
-            save_results = (
-                input(f"\n💾 Save learning results for {library_name} to file? (y/n): ")
-                .strip()
-                .lower()
+                    print("\n📝 Explanation:")
+                    print(example["explanation"])
+
+                    print("\n✅ Best Practices:")
+                    print("\n".join([f"  • {bp}" for bp in example["best_practices"]]))
+                    print("--- END OF EXAMPLE ---")
+
+                # Store the complete results
+                learned_libraries[library_name] = {
+                    "library_info": library_info,
+                    "examples": all_examples,
+                }
+
+                # Step 4: Offer to save the results to a file
+                save_results = (
+                    input(f"\n💾 Save learning results for {library_name} to file? (y/n): ")
+                    .strip()
+                    .lower()
+                )
+                if save_results in ["y", "yes"]:
+                    filename = input(
+                        f"   Enter filename (default: {library_name.lower()}_learning.json): "
+                    ).strip()
+                    if not filename:
+                        filename = f"{library_name.lower()}_learning.json"
+
+                    try:
+                        with open(filename, "w", encoding="utf-8") as f:
+                            json.dump(
+                                learned_libraries[library_name], f, indent=2, default=str
+                            )
+                        print(f"   ✅ Results saved to {filename}")
+                    except Exception as e:
+                        print(f"   ❌ Error saving file: {e}")
+
+            except Exception as e:
+                print(f"❌ An error occurred while learning {library_name}: {e}")
+
+        print("\n👋 Thanks for using the Interactive Library Learning System!")
+        if learned_libraries:
+            print(f"\n🎉 Session Summary:")
+            print(
+                f"Successfully learned {len(learned_libraries)} libraries: {list(learned_libraries.keys())}"
             )
-            if save_results in ["y", "yes"]:
-                filename = input(
-                    f"   Enter filename (default: {library_name.lower()}_learning.json): "
-                ).strip()
-                if not filename:
-                    filename = f"{library_name.lower()}_learning.json"
-
-                try:
-                    with open(filename, "w", encoding="utf-8") as f:
-                        json.dump(
-                            learned_libraries[library_name], f, indent=2, default=str
-                        )
-                    print(f"   ✅ Results saved to {filename}")
-                except Exception as e:
-                    print(f"   ❌ Error saving file: {e}")
-
-        except Exception as e:
-            print(f"❌ An error occurred while learning {library_name}: {e}")
-
-    print("\n👋 Thanks for using the Interactive Library Learning System!")
-    if learned_libraries:
-        print(f"\n🎉 Session Summary:")
-        print(
-            f"Successfully learned {len(learned_libraries)} libraries: {list(learned_libraries.keys())}"
-        )
+    finally:
+        stop_ollama_model(MODEL_NAME)
 
 
 if __name__ == "__main__":
