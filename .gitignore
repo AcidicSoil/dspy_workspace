@@ -13,7 +13,8 @@ codefetch/
 mlruns/
 # Enviroment variables
 .env
-
+.cursorignore
+.browser-echo-mcp.json
 # Python virtual environment
 **/.venv/
 *.learning.json

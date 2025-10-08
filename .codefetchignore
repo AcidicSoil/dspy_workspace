@@ -1,0 +1,49 @@
+test/
+vitest.config.ts
+dspy/
+.clinerules/
+.cursor/
+.gemini/
+.taskmaster/
+DSPY_Dev_Assistant/
+artifacts/
+codefetch/
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+
+# MLFlow
+mlruns/
+# Enviroment variables
+.env
+
+# Python virtual environment
+**/.venv/
+*.learning.json
+# Misc. workspaces
+/other
+*:Zone.Identifier
+uv.lock
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+.DS_Store
+
+# Task files
+tasks.json
+tasks/
