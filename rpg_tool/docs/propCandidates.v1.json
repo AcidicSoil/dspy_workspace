@@ -1,0 +1,305 @@
+{
+  "metadata": {
+    "artifact": "RPG PROP-001/PROP-002 Candidate Functionality Set",
+    "version": "1.0.0",
+    "generated_at": "2025-10-01T00:00:00Z",
+    "source_tree": "Feature Tree Seed v0.1.0",
+    "rpg_alignment": {
+      "build_guide_ids": ["PROP-001", "PROP-002", "PROP-003"],
+      "whitepaper_sections": ["§3.2", "Alg. 2"],
+      "notes": "Exploit: token+path semantic; Explore: branch/level stratified with overlap threshold 0.5; Filter/Merge: simple dedupe + rationale."
+    }
+  },
+  "retrieval_request": {
+    "query_summary": "Build a classification pipeline on CSV data with scaling and one-hot encoding, train Logistic Regression, evaluate with Accuracy and F1 (optionally ROC AUC), split data via train/test (optionally K-fold), and save the model.",
+    "query_tokens": [
+      "read_csv",
+      "standard_scaler",
+      "logistic",
+      "accuracy",
+      "f1",
+      "train_test_split",
+      "save_model"
+    ],
+    "filters": {
+      "levels": [4],
+      "branches": ["data", "ml", "evaluation", "io"]
+    },
+    "k": 8,
+    "overlap_threshold": 0.5
+  },
+  "exploit_hits": [
+    {
+      "rank": 1,
+      "id": "FT-1101",
+      "path": "ml/algorithms/classification/logistic_regression",
+      "score": 0.95,
+      "reason": "exact token match (logistic) + classification path proximity"
+    },
+    {
+      "rank": 2,
+      "id": "FT-2001",
+      "path": "data/loading/csv/read_csv",
+      "score": 0.92,
+      "reason": "exact token match (read_csv)"
+    },
+    {
+      "rank": 3,
+      "id": "FT-2101",
+      "path": "data/preprocessing/scaling/standard_scaler",
+      "score": 0.9,
+      "reason": "exact token match (standard_scaler)"
+    },
+    {
+      "rank": 4,
+      "id": "FT-3302",
+      "path": "evaluation/validation/train_test_split/train_test_split",
+      "score": 0.88,
+      "reason": "exact token match (train_test_split)"
+    },
+    {
+      "rank": 5,
+      "id": "FT-3002",
+      "path": "evaluation/metrics/classification/f1_score",
+      "score": 0.87,
+      "reason": "exact token match (f1) + classification metrics proximity"
+    },
+    {
+      "rank": 6,
+      "id": "FT-3001",
+      "path": "evaluation/metrics/classification/accuracy_score",
+      "score": 0.86,
+      "reason": "exact token match (accuracy) + classification metrics proximity"
+    },
+    {
+      "rank": 7,
+      "id": "FT-4001",
+      "path": "io/persistence/save_model/save_model_joblib",
+      "score": 0.84,
+      "reason": "exact token match (save_model)"
+    },
+    {
+      "rank": 8,
+      "id": "FT-2301",
+      "path": "data/preprocessing/encoding/one_hot_encoder",
+      "score": 0.83,
+      "reason": "derived from spec need for categoricals (one-hot)"
+    }
+  ],
+  "explore_candidates": [
+    {
+      "id": "FT-1102",
+      "path": "ml/algorithms/classification/svm_classifier",
+      "score": 0.72,
+      "reason": "alternative classifier for robustness; different margin properties"
+    },
+    {
+      "id": "FT-1103",
+      "path": "ml/algorithms/classification/decision_tree_classifier",
+      "score": 0.7,
+      "reason": "alternative with different bias/variance profile"
+    },
+    {
+      "id": "FT-3301",
+      "path": "evaluation/validation/cross_validation/k_fold",
+      "score": 0.69,
+      "reason": "more stable validation than single holdout"
+    },
+    {
+      "id": "FT-3003",
+      "path": "evaluation/metrics/classification/roc_auc_score",
+      "score": 0.68,
+      "reason": "metric robust to class imbalance"
+    },
+    {
+      "id": "FT-2102",
+      "path": "data/preprocessing/scaling/minmax_scaler",
+      "score": 0.65,
+      "reason": "alternative scaling depending on model sensitivity"
+    },
+    {
+      "id": "FT-2201",
+      "path": "data/preprocessing/imputation/mean_imputer",
+      "score": 0.64,
+      "reason": "handle missing numeric values"
+    },
+    {
+      "id": "FT-2202",
+      "path": "data/preprocessing/imputation/median_imputer",
+      "score": 0.63,
+      "reason": "robust imputation for skewed data"
+    },
+    {
+      "id": "FT-4101",
+      "path": "io/serialization/to_json/model_to_json",
+      "score": 0.6,
+      "reason": "alternate serialization format"
+    }
+  ],
+  "filter_merge": {
+    "kept": [
+      {
+        "id": "FT-1101",
+        "path": "ml/algorithms/classification/logistic_regression",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-2001",
+        "path": "data/loading/csv/read_csv",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-2301",
+        "path": "data/preprocessing/encoding/one_hot_encoder",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-2201",
+        "path": "data/preprocessing/imputation/mean_imputer",
+        "source": "explore"
+      },
+      {
+        "id": "FT-2101",
+        "path": "data/preprocessing/scaling/standard_scaler",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-3302",
+        "path": "evaluation/validation/train_test_split/train_test_split",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-3301",
+        "path": "evaluation/validation/cross_validation/k_fold",
+        "source": "explore"
+      },
+      {
+        "id": "FT-3001",
+        "path": "evaluation/metrics/classification/accuracy_score",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-3002",
+        "path": "evaluation/metrics/classification/f1_score",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-3003",
+        "path": "evaluation/metrics/classification/roc_auc_score",
+        "source": "explore"
+      },
+      {
+        "id": "FT-4001",
+        "path": "io/persistence/save_model/save_model_joblib",
+        "source": "exploit"
+      },
+      {
+        "id": "FT-1102",
+        "path": "ml/algorithms/classification/svm_classifier",
+        "source": "explore"
+      },
+      {
+        "id": "FT-1103",
+        "path": "ml/algorithms/classification/decision_tree_classifier",
+        "source": "explore"
+      }
+    ],
+    "dropped": [
+      {
+        "id": "FT-2102",
+        "path": "data/preprocessing/scaling/minmax_scaler",
+        "reason": "redundant with standard scaler for baseline"
+      },
+      {
+        "id": "FT-2202",
+        "path": "data/preprocessing/imputation/median_imputer",
+        "reason": "choose one default imputer to reduce overlap"
+      },
+      {
+        "id": "FT-4101",
+        "path": "io/serialization/to_json/model_to_json",
+        "reason": "persistence already covered by save_model"
+      }
+    ]
+  },
+  "final_candidate_set": [
+    {
+      "order": 1,
+      "id": "FT-2001",
+      "path": "data/loading/csv/read_csv",
+      "role": "ingest"
+    },
+    {
+      "order": 2,
+      "id": "FT-2301",
+      "path": "data/preprocessing/encoding/one_hot_encoder",
+      "role": "preprocess"
+    },
+    {
+      "order": 3,
+      "id": "FT-2201",
+      "path": "data/preprocessing/imputation/mean_imputer",
+      "role": "preprocess"
+    },
+    {
+      "order": 4,
+      "id": "FT-2101",
+      "path": "data/preprocessing/scaling/standard_scaler",
+      "role": "preprocess"
+    },
+    {
+      "order": 5,
+      "id": "FT-1101",
+      "path": "ml/algorithms/classification/logistic_regression",
+      "role": "fit"
+    },
+    {
+      "order": 6,
+      "id": "FT-3302",
+      "path": "evaluation/validation/train_test_split/train_test_split",
+      "role": "validate"
+    },
+    {
+      "order": 7,
+      "id": "FT-3001",
+      "path": "evaluation/metrics/classification/accuracy_score",
+      "role": "metric"
+    },
+    {
+      "order": 8,
+      "id": "FT-3002",
+      "path": "evaluation/metrics/classification/f1_score",
+      "role": "metric"
+    },
+    {
+      "order": 9,
+      "id": "FT-3003",
+      "path": "evaluation/metrics/classification/roc_auc_score",
+      "role": "metric-optional"
+    },
+    {
+      "order": 10,
+      "id": "FT-4001",
+      "path": "io/persistence/save_model/save_model_joblib",
+      "role": "persist"
+    },
+    {
+      "order": 11,
+      "id": "FT-1102",
+      "path": "ml/algorithms/classification/svm_classifier",
+      "role": "alternative"
+    },
+    {
+      "order": 12,
+      "id": "FT-1103",
+      "path": "ml/algorithms/classification/decision_tree_classifier",
+      "role": "alternative"
+    },
+    {
+      "order": 13,
+      "id": "FT-3301",
+      "path": "evaluation/validation/cross_validation/k_fold",
+      "role": "validate-optional"
+    }
+  ]
+}

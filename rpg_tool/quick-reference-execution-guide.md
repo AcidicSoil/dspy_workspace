@@ -1,0 +1,32 @@
+Here’s a quick-reference you can use to jump to the right place in our two sources for **each step of the execution order**. For each item I list the **Build Guide instruction (procedural)** and the **Whitepaper anchor (concept/conceptual)** as recorded in the guide’s Trace Matrix/“Source” fields.
+
+- **4 — DSC-001 · Develop Project Spec Parser** → **Build Guide:** DSC-001 (Discover). **Whitepaper:** ¶2.
+- **1 — DSC-002 · Define RPG Schema** → **Build Guide:** DSC-002. **Whitepaper:** ¶6.
+- **2 — Extend Graph Service (typed nodes/edges)** → **Build Guide:** under DSC-002 (schema adoption) and IMPL-003 (typed data_flow semantics). **Whitepaper:** ¶6/¶12 (nodes/edges, DAG).
+- **6 — DSC-003 · Feature Tree Index** → **Build Guide:** DSC-003. **Whitepaper:** ¶7 (global feature tree).
+- **7 — PROP-001 · Exploit Retrieval (top-k)** → **Build Guide:** PROP-001. **Whitepaper:** ¶8 (proposal-stage retrieval).
+- **8 — PROP-002 · Explore Sampling (diversity)** → **Build Guide:** PROP-002. **Whitepaper:** ¶8.
+- **9 — PROP-003 · LLM Filter & Merge** → **Build Guide:** PROP-003. **Whitepaper:** ¶8 (batch self-check).
+- **10 — PROP-004 · Refactor into Cohesive Modules** → **Build Guide:** PROP-004. **Whitepaper:** ¶9 (reorganization into functionality graph).
+- **11 — PROP-005 · Persist L0 Functionality Graph** → **Build Guide:** PROP-005. **Whitepaper:** ¶4 (persistence/versioning motivation).
+- **5 — IMPL-001 · Map nodes→folders (L0→L1)** → **Build Guide:** IMPL-001. **Whitepaper:** ¶10.
+- **12 — IMPL-002 · Group capabilities into files (L1→L2)** → **Build Guide:** IMPL-002. **Whitepaper:** ¶11.
+- **13 — IMPL-003 · Encode typed data-flows** → **Build Guide:** IMPL-003. **Whitepaper:** ¶12 (DAG/acyclicity).
+- **26 — MON-001 · CI gate: DAG & schema** → **Build Guide:** MON-001. **Whitepaper:** ¶12.
+- **14 — IMPL-004 · Intra-module file order (define)** → **Build Guide:** IMPL-004. **Whitepaper:** ¶6 (order edges).
+- **30 — IMPL-004 · Intra-module order lints** → **Build Guide:** IMPL-004 (linting follow-on). **Whitepaper:** ¶6.
+- **15 — IMPL-005 · Abstract base classes & shared types** → **Build Guide:** IMPL-005. **Whitepaper:** ¶13.
+- **16 — IMPL-006 · One interface per leaf** → **Build Guide:** IMPL-006. **Whitepaper:** ¶14.
+- **3 — GEN-001 · Topological build plan** → **Build Guide:** GEN-001. **Whitepaper:** ¶15 (graph-guided TDD/topo).
+- **27 — MON-002 · Audit logging of localization steps** → **Build Guide:** MON-002. **Whitepaper:** C.3 (audit logs/tool calls).
+- **17 — GEN-002 · Auto-derive unit tests** → **Build Guide:** GEN-002. **Whitepaper:** ¶15.
+- **18 — GEN-003 · Implement-to-green & coverage gate** → **Build Guide:** GEN-003. **Whitepaper:** ¶15.
+- **19 — GEN-004 · Selective regression by impact** → **Build Guide:** GEN-004. **Whitepaper:** ¶17 (staged testing/regression).
+- **20 — GEN-005 · Integration tests per subgraph** → **Build Guide:** GEN-005. **Whitepaper:** ¶17.
+- **21 — VAL-001 · Majority-vote semantic validator** → **Build Guide:** Validation list; mapped via Trace Matrix. **Whitepaper:** D.3/D.3.1 (vote-based judging).
+- **22 — VAL-002 · Failure attribution & auto-remediation** → **Build Guide:** VAL-002. **Whitepaper:** ¶17 (diagnosis in staged loop).
+- **23 — VAL-003 · RepoCraft metrics (Coverage/Novelty/Pass/Vote/Files/LOC/Tokens)** → **Build Guide:** VAL-003. **Whitepaper:** ¶19 (metrics), §5/Appendix D references in checklist.
+- **24 — BMR-001 · Build benchmark task set** → **Build Guide:** BMR-001. **Whitepaper:** D.2 (task harvesting).
+- **25 — BMR-002 · Evaluation loop per task** → **Build Guide:** BMR-002. **Whitepaper:** D.3 (localize → vote → execute).
+- **28 — MON-003 · Governance: SBOM, licenses, secrets** → **Build Guide:** MON-003 (governance). **Whitepaper:** (policy/gov motivation noted; no specific section call-out).
+- **29 — MON-004 · Scaling dashboards** → **Build Guide:** MON-004. **Whitepaper:** §7.1/§7.2 (near-linear growth & scaling).

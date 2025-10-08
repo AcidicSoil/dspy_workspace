@@ -1,0 +1,771 @@
+{
+  "metadata": {
+    "name": "RPG Global Feature Tree — Local Seed",
+    "version": "0.1.0",
+    "generated_at": "2025-10-01T00:00:00Z",
+    "rpg_alignment": {
+      "build_guide_ids": ["DSC-003"],
+      "whitepaper_sections": ["§3.2", "Appx A.2"]
+    },
+    "description": "Bootstrapped, self-contained feature tree seed with hierarchical nodes and a minimal retrieval index to ground proposal-level planning locally.",
+    "levels": 4,
+    "stats": { "node_count": 44 }
+  },
+  "schema": {
+    "node": {
+      "id": "string",
+      "path": "string (slash-delimited hierarchy)",
+      "name": "string",
+      "level": "integer (1=root … n=leaf)",
+      "ancestors": "string[]",
+      "description": "string",
+      "tags": "string[]",
+      "aliases": "string[]"
+    },
+    "hierarchy_edges": { "parent": "node.id", "child": "node.id" },
+    "retrieval": {
+      "embedding_method": "feature_hashing_bigrams",
+      "dims": 8,
+      "vectors": { "node.id": "float[dims] for leaf nodes" },
+      "inverted_index": { "token": "node.id[]" }
+    }
+  },
+  "nodes": [
+    {
+      "id": "FT-0001",
+      "path": "ml",
+      "name": "Machine Learning",
+      "level": 1,
+      "ancestors": [],
+      "description": "ML-related functionality root.",
+      "tags": ["ml"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0002",
+      "path": "data",
+      "name": "Data",
+      "level": 1,
+      "ancestors": [],
+      "description": "Data ingestion and preprocessing.",
+      "tags": ["data"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0003",
+      "path": "evaluation",
+      "name": "Evaluation",
+      "level": 1,
+      "ancestors": [],
+      "description": "Metrics and validation.",
+      "tags": ["eval"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0004",
+      "path": "io",
+      "name": "I/O",
+      "level": 1,
+      "ancestors": [],
+      "description": "Serialization and persistence.",
+      "tags": ["io"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0101",
+      "path": "ml/algorithms",
+      "name": "Algorithms",
+      "level": 2,
+      "ancestors": ["ml"],
+      "description": "Learning algorithms.",
+      "tags": ["ml"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0102",
+      "path": "ml/model_selection",
+      "name": "Model Selection",
+      "level": 2,
+      "ancestors": ["ml"],
+      "description": "Hyperparameter tuning and selection.",
+      "tags": ["ml", "selection"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0201",
+      "path": "data/loading",
+      "name": "Loading",
+      "level": 2,
+      "ancestors": ["data"],
+      "description": "Read data from files.",
+      "tags": ["io", "data"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0202",
+      "path": "data/preprocessing",
+      "name": "Preprocessing",
+      "level": 2,
+      "ancestors": ["data"],
+      "description": "Transform raw data.",
+      "tags": ["prep"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0301",
+      "path": "evaluation/metrics",
+      "name": "Metrics",
+      "level": 2,
+      "ancestors": ["evaluation"],
+      "description": "Quality measures.",
+      "tags": ["metrics"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0302",
+      "path": "evaluation/validation",
+      "name": "Validation",
+      "level": 2,
+      "ancestors": ["evaluation"],
+      "description": "Train/test protocols.",
+      "tags": ["validation"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0401",
+      "path": "io/persistence",
+      "name": "Persistence",
+      "level": 2,
+      "ancestors": ["io"],
+      "description": "Save/load models.",
+      "tags": ["persistence"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0402",
+      "path": "io/serialization",
+      "name": "Serialization",
+      "level": 2,
+      "ancestors": ["io"],
+      "description": "Object serialization.",
+      "tags": ["serialization"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0111",
+      "path": "ml/algorithms/regression",
+      "name": "Regression",
+      "level": 3,
+      "ancestors": ["ml", "algorithms"],
+      "description": "Continuous target prediction.",
+      "tags": ["regression"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0112",
+      "path": "ml/algorithms/classification",
+      "name": "Classification",
+      "level": 3,
+      "ancestors": ["ml", "algorithms"],
+      "description": "Discrete label prediction.",
+      "tags": ["classification"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0113",
+      "path": "ml/algorithms/clustering",
+      "name": "Clustering",
+      "level": 3,
+      "ancestors": ["ml", "algorithms"],
+      "description": "Unsupervised grouping.",
+      "tags": ["clustering"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0211",
+      "path": "data/loading/csv",
+      "name": "CSV",
+      "level": 3,
+      "ancestors": ["data", "loading"],
+      "description": "Comma-separated values.",
+      "tags": ["csv"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0212",
+      "path": "data/loading/json",
+      "name": "JSON",
+      "level": 3,
+      "ancestors": ["data", "loading"],
+      "description": "JavaScript Object Notation.",
+      "tags": ["json"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0221",
+      "path": "data/preprocessing/scaling",
+      "name": "Scaling",
+      "level": 3,
+      "ancestors": ["data", "preprocessing"],
+      "description": "Feature scaling.",
+      "tags": ["scaling"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0222",
+      "path": "data/preprocessing/imputation",
+      "name": "Imputation",
+      "level": 3,
+      "ancestors": ["data", "preprocessing"],
+      "description": "Missing value handling.",
+      "tags": ["impute"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0223",
+      "path": "data/preprocessing/encoding",
+      "name": "Encoding",
+      "level": 3,
+      "ancestors": ["data", "preprocessing"],
+      "description": "Categorical encoders.",
+      "tags": ["encoding"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0311",
+      "path": "evaluation/metrics/classification",
+      "name": "Classification Metrics",
+      "level": 3,
+      "ancestors": ["evaluation", "metrics"],
+      "description": "Metrics for classifiers.",
+      "tags": ["metrics", "classification"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0312",
+      "path": "evaluation/metrics/regression",
+      "name": "Regression Metrics",
+      "level": 3,
+      "ancestors": ["evaluation", "metrics"],
+      "description": "Metrics for regressors.",
+      "tags": ["metrics", "regression"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0313",
+      "path": "evaluation/metrics/clustering",
+      "name": "Clustering Metrics",
+      "level": 3,
+      "ancestors": ["evaluation", "metrics"],
+      "description": "Metrics for clustering.",
+      "tags": ["metrics", "clustering"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0321",
+      "path": "evaluation/validation/cross_validation",
+      "name": "Cross-Validation",
+      "level": 3,
+      "ancestors": ["evaluation", "validation"],
+      "description": "K-fold, etc.",
+      "tags": ["cv"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0322",
+      "path": "evaluation/validation/train_test_split",
+      "name": "Train/Test Split",
+      "level": 3,
+      "ancestors": ["evaluation", "validation"],
+      "description": "Holdout split.",
+      "tags": ["split"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-0411",
+      "path": "io/persistence/save_model",
+      "name": "Save Model",
+      "level": 3,
+      "ancestors": ["io", "persistence"],
+      "description": "Persist models.",
+      "tags": ["save"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0412",
+      "path": "io/persistence/load_model",
+      "name": "Load Model",
+      "level": 3,
+      "ancestors": ["io", "persistence"],
+      "description": "Restore models.",
+      "tags": ["load"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0421",
+      "path": "io/serialization/to_json",
+      "name": "To JSON",
+      "level": 3,
+      "ancestors": ["io", "serialization"],
+      "description": "Serialize to JSON.",
+      "tags": ["json"],
+      "aliases": []
+    },
+    {
+      "id": "FT-0422",
+      "path": "io/serialization/to_pickle",
+      "name": "To Pickle",
+      "level": 3,
+      "ancestors": ["io", "serialization"],
+      "description": "Serialize to pickle.",
+      "tags": ["pickle"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-1001",
+      "path": "ml/algorithms/regression/linear_regression",
+      "name": "Linear Regression",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "regression"],
+      "description": "Ordinary least squares.",
+      "tags": ["ols", "regression"],
+      "aliases": ["OLS"]
+    },
+    {
+      "id": "FT-1002",
+      "path": "ml/algorithms/regression/ridge",
+      "name": "Ridge Regression",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "regression"],
+      "description": "L2-regularized regression.",
+      "tags": ["ridge", "l2"],
+      "aliases": []
+    },
+    {
+      "id": "FT-1003",
+      "path": "ml/algorithms/regression/lasso",
+      "name": "Lasso Regression",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "regression"],
+      "description": "L1-regularized regression.",
+      "tags": ["lasso", "l1"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-1101",
+      "path": "ml/algorithms/classification/logistic_regression",
+      "name": "Logistic Regression",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "classification"],
+      "description": "Binary/multiclass logistic model.",
+      "tags": ["logistic", "classification"],
+      "aliases": []
+    },
+    {
+      "id": "FT-1102",
+      "path": "ml/algorithms/classification/svm_classifier",
+      "name": "SVM Classifier",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "classification"],
+      "description": "Support Vector Machine (C-SVC).",
+      "tags": ["svm", "classification"],
+      "aliases": ["SVC"]
+    },
+    {
+      "id": "FT-1103",
+      "path": "ml/algorithms/classification/decision_tree_classifier",
+      "name": "Decision Tree Classifier",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "classification"],
+      "description": "CART decision tree for classification.",
+      "tags": ["tree", "classification"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-1201",
+      "path": "ml/algorithms/clustering/kmeans",
+      "name": "K-Means",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "clustering"],
+      "description": "Partition into k clusters via Lloyd's algorithm.",
+      "tags": ["kmeans", "clustering"],
+      "aliases": []
+    },
+    {
+      "id": "FT-1202",
+      "path": "ml/algorithms/clustering/kmedoids",
+      "name": "K-Medoids",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "clustering"],
+      "description": "Partitioning Around Medoids.",
+      "tags": ["kmedoids", "clustering"],
+      "aliases": []
+    },
+    {
+      "id": "FT-1203",
+      "path": "ml/algorithms/clustering/dbscan",
+      "name": "DBSCAN",
+      "level": 4,
+      "ancestors": ["ml", "algorithms", "clustering"],
+      "description": "Density-based clustering.",
+      "tags": ["dbscan", "clustering"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-2001",
+      "path": "data/loading/csv/read_csv",
+      "name": "Read CSV",
+      "level": 4,
+      "ancestors": ["data", "loading", "csv"],
+      "description": "Read tabular data from CSV.",
+      "tags": ["csv", "io"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2002",
+      "path": "data/loading/json/read_json",
+      "name": "Read JSON",
+      "level": 4,
+      "ancestors": ["data", "loading", "json"],
+      "description": "Read data from JSON.",
+      "tags": ["json", "io"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-2101",
+      "path": "data/preprocessing/scaling/standard_scaler",
+      "name": "Standard Scaler",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "scaling"],
+      "description": "Z-score standardization.",
+      "tags": ["scaling", "standardize"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2102",
+      "path": "data/preprocessing/scaling/minmax_scaler",
+      "name": "MinMax Scaler",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "scaling"],
+      "description": "Scale features to [0,1].",
+      "tags": ["scaling", "minmax"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2201",
+      "path": "data/preprocessing/imputation/mean_imputer",
+      "name": "Mean Imputer",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "imputation"],
+      "description": "Replace NaNs with column means.",
+      "tags": ["impute", "mean"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2202",
+      "path": "data/preprocessing/imputation/median_imputer",
+      "name": "Median Imputer",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "imputation"],
+      "description": "Replace NaNs with medians.",
+      "tags": ["impute", "median"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2301",
+      "path": "data/preprocessing/encoding/one_hot_encoder",
+      "name": "One-Hot Encoder",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "encoding"],
+      "description": "One-hot encode categoricals.",
+      "tags": ["encoding", "onehot"],
+      "aliases": []
+    },
+    {
+      "id": "FT-2302",
+      "path": "data/preprocessing/encoding/label_encoder",
+      "name": "Label Encoder",
+      "level": 4,
+      "ancestors": ["data", "preprocessing", "encoding"],
+      "description": "Ordinal label encoding.",
+      "tags": ["encoding", "label"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-3001",
+      "path": "evaluation/metrics/classification/accuracy_score",
+      "name": "Accuracy Score",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "classification"],
+      "description": "Fraction of correct predictions.",
+      "tags": ["accuracy", "classification"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3002",
+      "path": "evaluation/metrics/classification/f1_score",
+      "name": "F1 Score",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "classification"],
+      "description": "Harmonic mean of precision and recall.",
+      "tags": ["f1", "classification"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3003",
+      "path": "evaluation/metrics/classification/roc_auc_score",
+      "name": "ROC AUC",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "classification"],
+      "description": "Area under ROC curve.",
+      "tags": ["roc", "auc"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3101",
+      "path": "evaluation/metrics/regression/mean_squared_error",
+      "name": "Mean Squared Error",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "regression"],
+      "description": "Average squared residuals.",
+      "tags": ["mse", "regression"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3102",
+      "path": "evaluation/metrics/regression/r2_score",
+      "name": "R2 Score",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "regression"],
+      "description": "Coefficient of determination.",
+      "tags": ["r2", "regression"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3201",
+      "path": "evaluation/metrics/clustering/silhouette_score",
+      "name": "Silhouette Score",
+      "level": 4,
+      "ancestors": ["evaluation", "metrics", "clustering"],
+      "description": "Mean silhouette coefficient.",
+      "tags": ["silhouette", "clustering"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-3301",
+      "path": "evaluation/validation/cross_validation/k_fold",
+      "name": "K-Fold Split",
+      "level": 4,
+      "ancestors": ["evaluation", "validation", "cross_validation"],
+      "description": "K-fold cross validation.",
+      "tags": ["cv", "kfold"],
+      "aliases": []
+    },
+    {
+      "id": "FT-3302",
+      "path": "evaluation/validation/train_test_split/train_test_split",
+      "name": "Train/Test Split",
+      "level": 4,
+      "ancestors": ["evaluation", "validation", "train_test_split"],
+      "description": "Holdout set split.",
+      "tags": ["split", "holdout"],
+      "aliases": []
+    },
+
+    {
+      "id": "FT-4001",
+      "path": "io/persistence/save_model/save_model_joblib",
+      "name": "Save Model (joblib)",
+      "level": 4,
+      "ancestors": ["io", "persistence", "save_model"],
+      "description": "Persist model via joblib.",
+      "tags": ["save", "joblib"],
+      "aliases": []
+    },
+    {
+      "id": "FT-4002",
+      "path": "io/persistence/load_model/load_model_joblib",
+      "name": "Load Model (joblib)",
+      "level": 4,
+      "ancestors": ["io", "persistence", "load_model"],
+      "description": "Load model via joblib.",
+      "tags": ["load", "joblib"],
+      "aliases": []
+    },
+    {
+      "id": "FT-4101",
+      "path": "io/serialization/to_json/model_to_json",
+      "name": "Model → JSON",
+      "level": 4,
+      "ancestors": ["io", "serialization", "to_json"],
+      "description": "Serialize model to JSON.",
+      "tags": ["json", "serialize"],
+      "aliases": []
+    },
+    {
+      "id": "FT-4102",
+      "path": "io/serialization/to_pickle/model_to_pickle",
+      "name": "Model → Pickle",
+      "level": 4,
+      "ancestors": ["io", "serialization", "to_pickle"],
+      "description": "Serialize model to pickle.",
+      "tags": ["pickle", "serialize"],
+      "aliases": []
+    }
+  ],
+
+  "hierarchy_edges": [
+    { "parent": "FT-0001", "child": "FT-0101" },
+    { "parent": "FT-0001", "child": "FT-0102" },
+    { "parent": "FT-0002", "child": "FT-0201" },
+    { "parent": "FT-0002", "child": "FT-0202" },
+    { "parent": "FT-0003", "child": "FT-0301" },
+    { "parent": "FT-0003", "child": "FT-0302" },
+    { "parent": "FT-0004", "child": "FT-0401" },
+    { "parent": "FT-0004", "child": "FT-0402" },
+
+    { "parent": "FT-0101", "child": "FT-0111" },
+    { "parent": "FT-0101", "child": "FT-0112" },
+    { "parent": "FT-0101", "child": "FT-0113" },
+    { "parent": "FT-0201", "child": "FT-0211" },
+    { "parent": "FT-0201", "child": "FT-0212" },
+    { "parent": "FT-0202", "child": "FT-0221" },
+    { "parent": "FT-0202", "child": "FT-0222" },
+    { "parent": "FT-0202", "child": "FT-0223" },
+    { "parent": "FT-0301", "child": "FT-0311" },
+    { "parent": "FT-0301", "child": "FT-0312" },
+    { "parent": "FT-0301", "child": "FT-0313" },
+    { "parent": "FT-0302", "child": "FT-0321" },
+    { "parent": "FT-0302", "child": "FT-0322" },
+    { "parent": "FT-0401", "child": "FT-0411" },
+    { "parent": "FT-0401", "child": "FT-0412" },
+    { "parent": "FT-0402", "child": "FT-0421" },
+    { "parent": "FT-0402", "child": "FT-0422" },
+
+    { "parent": "FT-0111", "child": "FT-1001" },
+    { "parent": "FT-0111", "child": "FT-1002" },
+    { "parent": "FT-0111", "child": "FT-1003" },
+    { "parent": "FT-0112", "child": "FT-1101" },
+    { "parent": "FT-0112", "child": "FT-1102" },
+    { "parent": "FT-0112", "child": "FT-1103" },
+    { "parent": "FT-0113", "child": "FT-1201" },
+    { "parent": "FT-0113", "child": "FT-1202" },
+    { "parent": "FT-0113", "child": "FT-1203" },
+
+    { "parent": "FT-0211", "child": "FT-2001" },
+    { "parent": "FT-0212", "child": "FT-2002" },
+
+    { "parent": "FT-0221", "child": "FT-2101" },
+    { "parent": "FT-0221", "child": "FT-2102" },
+    { "parent": "FT-0222", "child": "FT-2201" },
+    { "parent": "FT-0222", "child": "FT-2202" },
+    { "parent": "FT-0223", "child": "FT-2301" },
+    { "parent": "FT-0223", "child": "FT-2302" },
+
+    { "parent": "FT-0311", "child": "FT-3001" },
+    { "parent": "FT-0311", "child": "FT-3002" },
+    { "parent": "FT-0311", "child": "FT-3003" },
+    { "parent": "FT-0312", "child": "FT-3101" },
+    { "parent": "FT-0312", "child": "FT-3102" },
+    { "parent": "FT-0313", "child": "FT-3201" },
+
+    { "parent": "FT-0321", "child": "FT-3301" },
+    { "parent": "FT-0322", "child": "FT-3302" },
+
+    { "parent": "FT-0411", "child": "FT-4001" },
+    { "parent": "FT-0412", "child": "FT-4002" },
+    { "parent": "FT-0421", "child": "FT-4101" },
+    { "parent": "FT-0422", "child": "FT-4102" }
+  ],
+
+  "retrieval": {
+    "embedding_method": "feature_hashing_bigrams",
+    "dims": 8,
+    "vectors": {
+      "FT-1001": [0.9, 0.1, 0.0, 0.2, 0.3, 0.0, 0.1, 0.0],
+      "FT-1002": [0.9, 0.1, 0.0, 0.2, 0.35, 0.05, 0.1, 0.0],
+      "FT-1003": [0.92, 0.08, 0.02, 0.18, 0.28, 0.02, 0.12, 0.0],
+
+      "FT-1101": [0.8, 0.2, 0.1, 0.1, 0.4, 0.0, 0.1, 0.1],
+      "FT-1102": [0.82, 0.18, 0.1, 0.12, 0.38, 0.02, 0.08, 0.1],
+      "FT-1103": [0.78, 0.22, 0.1, 0.1, 0.42, 0.0, 0.12, 0.08],
+
+      "FT-1201": [0.7, 0.0, 0.3, 0.1, 0.2, 0.2, 0.0, 0.1],
+      "FT-1202": [0.7, 0.02, 0.28, 0.1, 0.22, 0.22, 0.0, 0.1],
+      "FT-1203": [0.68, 0.0, 0.32, 0.12, 0.18, 0.18, 0.02, 0.1],
+
+      "FT-2001": [0.1, 0.9, 0.0, 0.0, 0.2, 0.1, 0.1, 0.0],
+      "FT-2002": [0.12, 0.88, 0.0, 0.02, 0.18, 0.12, 0.08, 0.0],
+
+      "FT-2101": [0.1, 0.8, 0.1, 0.0, 0.3, 0.1, 0.0, 0.0],
+      "FT-2102": [0.12, 0.78, 0.12, 0.0, 0.28, 0.12, 0.0, 0.0],
+      "FT-2201": [0.1, 0.7, 0.2, 0.1, 0.2, 0.1, 0.0, 0.0],
+      "FT-2202": [0.12, 0.68, 0.22, 0.08, 0.22, 0.1, 0.0, 0.0],
+      "FT-2301": [0.1, 0.6, 0.1, 0.2, 0.1, 0.1, 0.1, 0.0],
+      "FT-2302": [0.12, 0.58, 0.12, 0.22, 0.12, 0.08, 0.1, 0.0],
+
+      "FT-3001": [0.2, 0.1, 0.8, 0.1, 0.2, 0.1, 0.0, 0.1],
+      "FT-3002": [0.2, 0.1, 0.82, 0.08, 0.22, 0.1, 0.0, 0.1],
+      "FT-3003": [0.22, 0.08, 0.78, 0.12, 0.18, 0.12, 0.0, 0.1],
+      "FT-3101": [0.2, 0.1, 0.7, 0.2, 0.1, 0.1, 0.0, 0.1],
+      "FT-3102": [0.22, 0.08, 0.68, 0.22, 0.12, 0.1, 0.0, 0.1],
+      "FT-3201": [0.2, 0.1, 0.6, 0.3, 0.1, 0.1, 0.0, 0.1],
+
+      "FT-3301": [0.2, 0.2, 0.6, 0.1, 0.1, 0.1, 0.1, 0.0],
+      "FT-3302": [0.22, 0.18, 0.58, 0.12, 0.12, 0.1, 0.1, 0.0],
+
+      "FT-4001": [0.0, 0.1, 0.1, 0.9, 0.0, 0.0, 0.2, 0.1],
+      "FT-4002": [0.0, 0.12, 0.12, 0.88, 0.02, 0.0, 0.2, 0.1],
+      "FT-4101": [0.0, 0.1, 0.1, 0.8, 0.1, 0.0, 0.1, 0.2],
+      "FT-4102": [0.02, 0.08, 0.12, 0.78, 0.12, 0.02, 0.1, 0.2]
+    },
+    "inverted_index": {
+      "linear": ["FT-1001"],
+      "ridge": ["FT-1002"],
+      "lasso": ["FT-1003"],
+      "logistic": ["FT-1101"],
+      "svm": ["FT-1102"],
+      "tree": ["FT-1103"],
+      "kmeans": ["FT-1201"],
+      "kmedoids": ["FT-1202"],
+      "dbscan": ["FT-1203"],
+      "read_csv": ["FT-2001"],
+      "read_json": ["FT-2002"],
+      "standard_scaler": ["FT-2101"],
+      "minmax_scaler": ["FT-2102"],
+      "mean_imputer": ["FT-2201"],
+      "median_imputer": ["FT-2202"],
+      "one_hot": ["FT-2301"],
+      "label_encoder": ["FT-2302"],
+      "accuracy": ["FT-3001"],
+      "f1": ["FT-3002"],
+      "roc_auc": ["FT-3003"],
+      "mse": ["FT-3101"],
+      "r2": ["FT-3102"],
+      "silhouette": ["FT-3201"],
+      "k_fold": ["FT-3301"],
+      "train_test_split": ["FT-3302"],
+      "save_model": ["FT-4001"],
+      "load_model": ["FT-4002"],
+      "to_json": ["FT-4101"],
+      "to_pickle": ["FT-4102"]
+    }
+  }
+}

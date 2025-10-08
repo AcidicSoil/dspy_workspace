@@ -1,0 +1,72 @@
+.venv
+.env
+venv
+scripts/
+_EXTRACTION_NOTES.txt
+.markdownlint-cli2.jsonc
+.markdownlint.json
+.rpg.report.json
+share/
+/out_repo/
+.share/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+__pycache__/
+.env.example
+
+uv.lock
+dist
+node_modules
+
+.AI_DOCS/data
+.AI_DOCS/instructions
+.AI_DOCS/tmp
+.AI_DOCS/src
+.AI_DOCS/scripts
+.AI_DOCS/.archive
+
+GEMINI.md
+
+codefetch/
+# VSCode
+.vscode/
+.cursor/
+.gemini/
+.cline/
+.clinerules/
+# Claude
+CLAUDE.md
+.claude/
+out_repo/
+# Codex
+
+
+
+# DS Store
+.DS_Store
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+# Dependency directories
+node_modules/
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/
