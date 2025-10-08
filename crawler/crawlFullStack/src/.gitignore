@@ -1,0 +1,15 @@
+/about/
+/challenge/
+/companies/
+/course/
+/faq/
+.vscode/
+.markdownlint.json
+/search/
+.markdownlint-cli2.jsonc
+
+dspy-data/
+*.egg-info/
+data/
+assets/
+

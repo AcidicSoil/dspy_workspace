@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fullstackopen-en-repo"
+version = "0.1.0"
+description = "Offline mirror of Full Stack Open (/en) course content as Markdown."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "crawl4ai",
+    "beautifulsoup4",
+    "markdownify",
+    "python-slugify",
+    "tqdm",
+    "requests",
+    "rich",
+    "typer",
+    "tomli",
+    "chromium>=0.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "bandit",
+    "playwright",
+]
+
+[project.scripts]
+crawl = "fullstackopen_en_repo.crawl_fullstackopen:APP"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.13"
+warn_return_any = true
+warn_unused_configs = true

@@ -1,0 +1,35 @@
+# Crawl policy knobs. Parsed by scripts/crawl_fullstackopen.py
+user_agent: "Mozilla/5.0 (compatible; FullstackOpenMirror/1.0; +https://example.invalid/personal-use)"
+max_concurrency: 3
+rate_limits:
+  requests_per_minute: 12
+  jitter_seconds: [0.3, 1.2]
+timeouts:
+  page_ms: 60000
+  wait_for_ms: 20000
+retry:
+  max_attempts: 3
+  backoff_base: 1.6
+allowed_path_prefix: "/en"
+allow_mime: ["text/html"]
+# Block noisy querystrings and infinite paths
+skip_query_params: ["utm_", "gclid", "fbclid", "ref", "share"]
+deny_path_regex:
+  - ".*\\?(.*=){5,}.*"    # too many params
+  - "/en/.*calendar.*"     # calendars if any
+  - "^/(?!en/)"            # any non-/en/ path
+allow_path_regex:
+  - "^/en/.*"
+content:
+  keep_selectors: ["main", "article", "#__next"]
+  drop_selectors: ["nav", "footer", "aside", "script", "style", "[role=\"navigation\"]", "[aria-label=\"breadcrumbs\"]"]
+markdown:
+  code_fences: true
+  fix_links: true
+assets:
+  dir: "assets"
+  download_images: true
+sitemap:
+  depth_limit: 3
+  canonicalize_trailing_slash: true
+  strip_fragments: true

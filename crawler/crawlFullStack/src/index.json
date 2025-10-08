@@ -1,0 +1,330 @@
+{
+  "part9/01-react-with-types.md": {
+    "title": "01-react-with-types",
+    "path": "part9/01-react-with-types.md"
+  },
+  "part9/01-first-steps-with-typescript.md": {
+    "title": "01-first-steps-with-typescript",
+    "path": "part9/01-first-steps-with-typescript.md"
+  },
+  "part9/01-fullstack-part9.md": {
+    "title": "01-fullstack-part9",
+    "path": "part9/01-fullstack-part9.md"
+  },
+  "part9/01-grande-finale-patientor.md": {
+    "title": "01-grande-finale-patientor",
+    "path": "part9/01-grande-finale-patientor.md"
+  },
+  "part9/01-typing-an-express-app.md": {
+    "title": "01-typing-an-express-app",
+    "path": "part9/01-typing-an-express-app.md"
+  },
+  "part9/01-background-and-introduction.md": {
+    "title": "01-background-and-introduction",
+    "path": "part9/01-background-and-introduction.md"
+  },
+  "search/01-search-from-the-material.md": {
+    "title": "01-search-from-the-material",
+    "path": "search/01-search-from-the-material.md"
+  },
+  "challenge/01-this-is-full-stack-challenge.md": {
+    "title": "01-this-is-full-stack-challenge",
+    "path": "challenge/01-this-is-full-stack-challenge.md"
+  },
+  "part13/01-fullstack-part13.md": {
+    "title": "01-fullstack-part13",
+    "path": "part13/01-fullstack-part13.md"
+  },
+  "part13/01-using-relational-databases-with-sequelize.md": {
+    "title": "01-using-relational-databases-with-sequelize",
+    "path": "part13/01-using-relational-databases-with-sequelize.md"
+  },
+  "part13/01-migrations-many-to-many-relationships.md": {
+    "title": "01-migrations-many-to-many-relationships",
+    "path": "part13/01-migrations-many-to-many-relationships.md"
+  },
+  "part13/01-join-tables-and-queries.md": {
+    "title": "01-join-tables-and-queries",
+    "path": "part13/01-join-tables-and-queries.md"
+  },
+  "part7/01-exercises-extending-the-bloglist.md": {
+    "title": "01-exercises-extending-the-bloglist",
+    "path": "part7/01-exercises-extending-the-bloglist.md"
+  },
+  "part7/01-react-router.md": {
+    "title": "01-react-router",
+    "path": "part7/01-react-router.md"
+  },
+  "part7/01-webpack.md": {
+    "title": "01-webpack",
+    "path": "part7/01-webpack.md"
+  },
+  "part7/01-custom-hooks.md": {
+    "title": "01-custom-hooks",
+    "path": "part7/01-custom-hooks.md"
+  },
+  "part7/01-more-about-styles.md": {
+    "title": "01-more-about-styles",
+    "path": "part7/01-more-about-styles.md"
+  },
+  "part7/01-class-components-miscellaneous.md": {
+    "title": "01-class-components-miscellaneous",
+    "path": "part7/01-class-components-miscellaneous.md"
+  },
+  "part7/01-fullstack-part7.md": {
+    "title": "01-fullstack-part7",
+    "path": "part7/01-fullstack-part7.md"
+  },
+  "part8/01-graphql-server.md": {
+    "title": "01-graphql-server",
+    "path": "part8/01-graphql-server.md"
+  },
+  "part8/01-fragments-and-subscriptions.md": {
+    "title": "01-fragments-and-subscriptions",
+    "path": "part8/01-fragments-and-subscriptions.md"
+  },
+  "part8/01-fullstack-part8.md": {
+    "title": "01-fullstack-part8",
+    "path": "part8/01-fullstack-part8.md"
+  },
+  "part8/01-react-and-graphql.md": {
+    "title": "01-react-and-graphql",
+    "path": "part8/01-react-and-graphql.md"
+  },
+  "part8/01-database-and-user-administration.md": {
+    "title": "01-database-and-user-administration",
+    "path": "part8/01-database-and-user-administration.md"
+  },
+  "part8/01-login-and-updating-the-cache.md": {
+    "title": "01-login-and-updating-the-cache",
+    "path": "part8/01-login-and-updating-the-cache.md"
+  },
+  "part10/01-react-native-basics.md": {
+    "title": "01-react-native-basics",
+    "path": "part10/01-react-native-basics.md"
+  },
+  "part10/01-testing-and-extending-our-application.md": {
+    "title": "01-testing-and-extending-our-application",
+    "path": "part10/01-testing-and-extending-our-application.md"
+  },
+  "part10/01-introduction-to-react-native.md": {
+    "title": "01-introduction-to-react-native",
+    "path": "part10/01-introduction-to-react-native.md"
+  },
+  "part10/01-communicating-with-server.md": {
+    "title": "01-communicating-with-server",
+    "path": "part10/01-communicating-with-server.md"
+  },
+  "part10/01-fullstack-part10.md": {
+    "title": "01-fullstack-part10",
+    "path": "part10/01-fullstack-part10.md"
+  },
+  "part3/01-fullstack-part3.md": {
+    "title": "01-fullstack-part3",
+    "path": "part3/01-fullstack-part3.md"
+  },
+  "part3/01-deploying-app-to-internet.md": {
+    "title": "01-deploying-app-to-internet",
+    "path": "part3/01-deploying-app-to-internet.md"
+  },
+  "part3/01-saving-data-to-mongodb.md": {
+    "title": "01-saving-data-to-mongodb",
+    "path": "part3/01-saving-data-to-mongodb.md"
+  },
+  "part3/01-node-js-and-express.md": {
+    "title": "01-node-js-and-express",
+    "path": "part3/01-node-js-and-express.md"
+  },
+  "part3/01-validation-and-eslint.md": {
+    "title": "01-validation-and-eslint",
+    "path": "part3/01-validation-and-eslint.md"
+  },
+  "part5/01-fullstack-part5.md": {
+    "title": "01-fullstack-part5",
+    "path": "part5/01-fullstack-part5.md"
+  },
+  "part5/01-props-children-and-proptypes.md": {
+    "title": "01-props-children-and-proptypes",
+    "path": "part5/01-props-children-and-proptypes.md"
+  },
+  "part5/01-testing-react-apps.md": {
+    "title": "01-testing-react-apps",
+    "path": "part5/01-testing-react-apps.md"
+  },
+  "part5/01-end-to-end-testing-cypress.md": {
+    "title": "01-end-to-end-testing-cypress",
+    "path": "part5/01-end-to-end-testing-cypress.md"
+  },
+  "part5/01-404-page-not-found.md": {
+    "title": "01-404-page-not-found",
+    "path": "part5/01-404-page-not-found.md"
+  },
+  "part5/01-end-to-end-testing-playwright.md": {
+    "title": "01-end-to-end-testing-playwright",
+    "path": "part5/01-end-to-end-testing-playwright.md"
+  },
+  "part5/01-login-in-frontend.md": {
+    "title": "01-login-in-frontend",
+    "path": "part5/01-login-in-frontend.md"
+  },
+  "part6/01-flux-architecture-and-redux.md": {
+    "title": "01-flux-architecture-and-redux",
+    "path": "part6/01-flux-architecture-and-redux.md"
+  },
+  "part6/01-many-reducers.md": {
+    "title": "01-many-reducers",
+    "path": "part6/01-many-reducers.md"
+  },
+  "part6/01-fullstack-part6.md": {
+    "title": "01-fullstack-part6",
+    "path": "part6/01-fullstack-part6.md"
+  },
+  "part6/01-react-query-usereducer-and-the-context.md": {
+    "title": "01-react-query-usereducer-and-the-context",
+    "path": "part6/01-react-query-usereducer-and-the-context.md"
+  },
+  "part6/01-communicating-with-server-in-a-redux-application.md": {
+    "title": "01-communicating-with-server-in-a-redux-application",
+    "path": "part6/01-communicating-with-server-in-a-redux-application.md"
+  },
+  "part11/01-expanding-further.md": {
+    "title": "01-expanding-further",
+    "path": "part11/01-expanding-further.md"
+  },
+  "part11/01-introduction-to-ci-cd.md": {
+    "title": "01-introduction-to-ci-cd",
+    "path": "part11/01-introduction-to-ci-cd.md"
+  },
+  "part11/01-keeping-green.md": {
+    "title": "01-keeping-green",
+    "path": "part11/01-keeping-green.md"
+  },
+  "part11/01-fullstack-part11.md": {
+    "title": "01-fullstack-part11",
+    "path": "part11/01-fullstack-part11.md"
+  },
+  "part11/01-getting-started-with-github-actions.md": {
+    "title": "01-getting-started-with-github-actions",
+    "path": "part11/01-getting-started-with-github-actions.md"
+  },
+  "part11/01-deployment.md": {
+    "title": "01-deployment",
+    "path": "part11/01-deployment.md"
+  },
+  "part12/01-fullstack-part12.md": {
+    "title": "01-fullstack-part12",
+    "path": "part12/01-fullstack-part12.md"
+  },
+  "part12/01-introduction-to-containers.md": {
+    "title": "01-introduction-to-containers",
+    "path": "part12/01-introduction-to-containers.md"
+  },
+  "part12/01-basics-of-orchestration.md": {
+    "title": "01-basics-of-orchestration",
+    "path": "part12/01-basics-of-orchestration.md"
+  },
+  "part12/01-building-and-configuring-environments.md": {
+    "title": "01-building-and-configuring-environments",
+    "path": "part12/01-building-and-configuring-environments.md"
+  },
+  "part2/01-rendering-a-collection-modules.md": {
+    "title": "01-rendering-a-collection-modules",
+    "path": "part2/01-rendering-a-collection-modules.md"
+  },
+  "part2/01-getting-data-from-server.md": {
+    "title": "01-getting-data-from-server",
+    "path": "part2/01-getting-data-from-server.md"
+  },
+  "part2/01-adding-styles-to-react-app.md": {
+    "title": "01-adding-styles-to-react-app",
+    "path": "part2/01-adding-styles-to-react-app.md"
+  },
+  "part2/01-altering-data-in-server.md": {
+    "title": "01-altering-data-in-server",
+    "path": "part2/01-altering-data-in-server.md"
+  },
+  "part2/01-fullstack-part2.md": {
+    "title": "01-fullstack-part2",
+    "path": "part2/01-fullstack-part2.md"
+  },
+  "part2/01-forms.md": {
+    "title": "01-forms",
+    "path": "part2/01-forms.md"
+  },
+  "companies/01-developer-stories-from-our-partners.md": {
+    "title": "01-developer-stories-from-our-partners",
+    "path": "companies/01-developer-stories-from-our-partners.md"
+  },
+  "part1/01-introduction-to-react.md": {
+    "title": "01-introduction-to-react",
+    "path": "part1/01-introduction-to-react.md"
+  },
+  "part1/01-a-more-complex-state-debugging-react-apps.md": {
+    "title": "01-a-more-complex-state-debugging-react-apps",
+    "path": "part1/01-a-more-complex-state-debugging-react-apps.md"
+  },
+  "part1/01-component-state-event-handlers.md": {
+    "title": "01-component-state-event-handlers",
+    "path": "part1/01-component-state-event-handlers.md"
+  },
+  "part1/01-fullstack-part2.md": {
+    "title": "01-fullstack-part2",
+    "path": "part1/01-fullstack-part2.md"
+  },
+  "part1/01-fullstack-part1.md": {
+    "title": "01-fullstack-part1",
+    "path": "part1/01-fullstack-part1.md"
+  },
+  "part1/01-javascript.md": {
+    "title": "01-javascript",
+    "path": "part1/01-javascript.md"
+  },
+  "course/00-index.md": {
+    "title": "00-index",
+    "path": "course/00-index.md"
+  },
+  "part4/01-testing-the-backend.md": {
+    "title": "01-testing-the-backend",
+    "path": "part4/01-testing-the-backend.md"
+  },
+  "part4/01-fullstack-part4.md": {
+    "title": "01-fullstack-part4",
+    "path": "part4/01-fullstack-part4.md"
+  },
+  "part4/01-user-administration.md": {
+    "title": "01-user-administration",
+    "path": "part4/01-user-administration.md"
+  },
+  "part4/01-structure-of-backend-application-introduction-to-testing.md": {
+    "title": "01-structure-of-backend-application-introduction-to-testing",
+    "path": "part4/01-structure-of-backend-application-introduction-to-testing.md"
+  },
+  "part4/01-token-authentication.md": {
+    "title": "01-token-authentication",
+    "path": "part4/01-token-authentication.md"
+  },
+  "faq/01-frequently-asked-questions.md": {
+    "title": "01-frequently-asked-questions",
+    "path": "faq/01-frequently-asked-questions.md"
+  },
+  "part0/01-fundamentals-of-web-apps.md": {
+    "title": "01-fundamentals-of-web-apps",
+    "path": "part0/01-fundamentals-of-web-apps.md"
+  },
+  "part0/01-general-info.md": {
+    "title": "01-general-info",
+    "path": "part0/01-general-info.md"
+  },
+  "part0/01-404-sivua-ei-loytynyt.md": {
+    "title": "01-404-sivua-ei-loytynyt",
+    "path": "part0/01-404-sivua-ei-loytynyt.md"
+  },
+  "part0/01-fullstack-part0.md": {
+    "title": "01-fullstack-part0",
+    "path": "part0/01-fullstack-part0.md"
+  },
+  "about/01-general.md": {
+    "title": "01-general",
+    "path": "about/01-general.md"
+  }
+}
