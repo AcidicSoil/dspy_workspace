@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dspyteach"
-version = "0.1.1"
+version = "0.1.2b4"
 description = "CLI utility that summarizes single files into teaching briefs using DSPy"
 authors = [{ name = "DSPy File Maintainers" }]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10,<3.12"
 dependencies = [
     "dspy>=2.6",
+    "pytest>=8.4.2",
     "python-dotenv>=1.0",
 ]
 keywords = ["dspy", "teaching", "summaries", "cli"]
@@ -27,9 +28,6 @@ dspy-file-teaching = "dspy_file.analyze_file_cli:main"
 
 [tool.setuptools.packages.find]
 include = ["dspy_file", "dspy_file.*"]
-
-[tool.uv]
-trusted-publishing = "always"
 
 [[tool.uv.index]]
 name = "testpypi"

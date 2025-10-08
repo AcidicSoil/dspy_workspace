@@ -35,6 +35,8 @@ def test_analyze_path_writes_markdown(tmp_path: Path) -> None:
             raw=False,
             recursive=True,
             include_globs=None,
+            confirm_each=False,
+            exclude_dirs=None,
             output_dir=output_dir,
         )
 
@@ -46,3 +48,65 @@ def test_analyze_path_writes_markdown(tmp_path: Path) -> None:
     generated_text = generated_files[0].read_text(encoding="utf-8")
     assert generated_text.startswith("# Teaching Brief\n")
     assert generated_text.endswith("\n")
+
+
+@mock.patch.object(analyze_file_cli, "_confirm_analyze", return_value=False)
+def test_analyze_path_confirm_each_skips_when_declined(confirm_mock: mock.Mock, tmp_path: Path) -> None:
+    source = tmp_path / "example.md"
+    source.write_text("# Title\n\nSome content", encoding="utf-8")
+
+    output_dir = tmp_path / "reports"
+    dummy = DummyAnalyzer()
+
+    with mock.patch.object(
+        analyze_file_cli, "FileTeachingAnalyzer", return_value=dummy
+    ):
+        exit_code = analyze_file_cli.analyze_path(
+            str(source),
+            raw=False,
+            recursive=True,
+            include_globs=None,
+            confirm_each=True,
+            exclude_dirs=None,
+            output_dir=output_dir,
+        )
+
+    assert exit_code == 0
+    assert dummy.calls == []
+    assert list(output_dir.glob("*.md")) == []
+    confirm_mock.assert_called_once()
+
+
+def test_analyze_path_respects_exclude_dirs(tmp_path: Path) -> None:
+    project_root = tmp_path / "project"
+    include_dir = project_root / "include"
+    skip_dir = project_root / "skip"
+    include_dir.mkdir(parents=True)
+    skip_dir.mkdir(parents=True)
+
+    include_file = include_dir / "keep.py"
+    skip_file = skip_dir / "ignore.py"
+    include_file.write_text("print('keep')\n", encoding="utf-8")
+    skip_file.write_text("print('ignore')\n", encoding="utf-8")
+
+    output_dir = tmp_path / "reports"
+    dummy = DummyAnalyzer()
+
+    with mock.patch.object(
+        analyze_file_cli, "FileTeachingAnalyzer", return_value=dummy
+    ):
+        exit_code = analyze_file_cli.analyze_path(
+            str(project_root),
+            raw=False,
+            recursive=True,
+            include_globs=None,
+            confirm_each=False,
+            exclude_dirs=["skip"],
+            output_dir=output_dir,
+        )
+
+    assert exit_code == 0
+    assert dummy.calls == [(str(include_file), "print('keep')\n")]
+    generated = list(output_dir.glob("*.md"))
+    assert len(generated) == 1
+    assert "ignore" not in generated[0].read_text(encoding="utf-8")

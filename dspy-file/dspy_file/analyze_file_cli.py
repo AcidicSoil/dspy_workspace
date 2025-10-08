@@ -78,6 +78,26 @@ def _write_output(
     return output_path
 
 
+
+def _confirm_analyze(path: Path) -> bool:
+    """Prompt the user for confirmation before analyzing a file."""
+
+    prompt = f"Analyze {path}? [Y/n]: "
+    while True:
+        try:
+            response = input(prompt)
+        except EOFError:
+            print("No input received; skipping.")
+            return False
+
+        normalized = response.strip().lower()
+        if normalized in {"", "y", "yes"}:
+            return True
+        if normalized in {"n", "no"}:
+            return False
+        print("Please answer 'y' or 'n'.")
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="Analyze a single file using DSPy signatures and modules",
@@ -103,6 +123,22 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--confirm-each",
+        "--interactive",
+        action="store_true",
+        dest="confirm_each",
+        help="Prompt for confirmation before analyzing each file.",
+    )
+    parser.add_argument(
+        "--exclude-dirs",
+        action="append",
+        dest="exclude_dirs",
+        default=None,
+        help=(
+            "Comma-separated relative directory paths to skip entirely when scanning."
+        ),
+    )
+    parser.add_argument(
         "--output-dir",
         dest="output_dir",
         default=None,
@@ -119,6 +155,8 @@ def analyze_path(
     raw: bool,
     recursive: bool,
     include_globs: list[str] | None,
+    confirm_each: bool,
+    exclude_dirs: list[str] | None,
     output_dir: Path,
 ) -> int:
     """Run the DSPy pipeline and render results to stdout for one or many files."""
@@ -128,6 +166,7 @@ def analyze_path(
         path,
         recursive=recursive,
         include_globs=include_globs,
+        exclude_dirs=exclude_dirs,
     )
 
     if not targets:
@@ -139,6 +178,10 @@ def analyze_path(
 
     exit_code = 0
     for target in targets:
+        if confirm_each and not _confirm_analyze(target):
+            print(f"Skipping {target} at user request.")
+            continue
+
         try:
             content = read_file_content(target)
         except (FileNotFoundError, UnicodeDecodeError) as exc:
@@ -182,11 +225,23 @@ def main(argv: list[str] | None = None) -> int:
             else DEFAULT_OUTPUT_DIR
         )
         print(f"Writing reports to {output_dir}")
+        exclude_dirs = None
+        if args.exclude_dirs:
+            parsed: list[str] = []
+            for entry in args.exclude_dirs:
+                parsed.extend(
+                    segment.strip()
+                    for segment in entry.split(",")
+                    if segment.strip()
+                )
+            exclude_dirs = parsed or None
         exit_code = analyze_path(
             args.path,
             raw=args.raw,
             recursive=not args.non_recursive,
             include_globs=args.include_globs,
+            confirm_each=args.confirm_each,
+            exclude_dirs=exclude_dirs,
             output_dir=output_dir,
         )
     except (FileNotFoundError, IsADirectoryError) as exc:

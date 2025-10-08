@@ -1,6 +1,19 @@
 # dspyteach – DSPy File Teaching Analyzer
 
-This folder contains a DSPy-powered CLI that analyzes source files (one or many) and produces teaching briefs. Each run captures:
+---
+
+[![PyPI](https://img.shields.io/pypi/v/dspyteach.svg?include_prereleases&cacheSeconds=60&t=1)](https://pypi.org/project/dspyteach/)
+[![Downloads](https://img.shields.io/pypi/dm/dspyteach.svg?cacheSeconds=300)](https://pypi.org/project/dspyteach/)
+[![Python](https://img.shields.io/pypi/pyversions/dspyteach.svg?cacheSeconds=300)](https://pypi.org/project/dspyteach/)
+[![License](https://img.shields.io/pypi/l/dspyteach.svg?cacheSeconds=300)](LICENSE)
+[![TestPyPI](https://img.shields.io/badge/TestPyPI-dspyteach-informational?cacheSeconds=300)](https://test.pypi.org/project/dspyteach/)
+[![CI](https://github.com/AcidicSoil/dspy-file/actions/workflows/release.yml/badge.svg)](…)
+
+---
+
+## DSPy-powered CLI that analyzes source files (one or many) and produces teaching briefs
+
+**Each run captures:**
 
 - an overview of the file and its major sections
 - key teaching points, workflows, and pitfalls highlighted in the material
@@ -13,21 +26,43 @@ The implementation mirrors the multi-file tutorial (`tutorials/multi-llmtxt_gene
 - `dspy_file/file_helpers.py` – utilities for loading files and rendering the markdown brief
 - `dspy_file/analyze_file_cli.py` – command line entry point that configures the local model and prints results. It can walk directories, apply glob filters, and batch-generate briefs.
 
+---
+
 ## Requirements
 
-- Python 3.12+
+- Python 3.10-3.12+
 - DSPy installed in the environment
 - Ollama running locally with the model `hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M` available
 - (Optional) `.env` file for any additional DSPy configuration; `dotenv` is loaded automatically
 
 Install the Python dependencies if you have not already:
+**you dont need all of these commands to correctly install**
+
+### I added multiple install commands and will cleanup later
+
+```bash
+uv init
+
+uv venv -p 3.12
+source .venv/bin/activate
+```
 
 ```bash
 uv pip install dspy python-dotenv
-ollama pull hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
+```
 
-# install the package locally (editable or regular)
-uv pip install -e .
+```bash
+uv sync
+```
+
+#### will add options to use your preferred model of choice later
+
+```bash
+ollama pull hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_M
+```
+
+```bash
+uv pip install dspyteach
 ```
 
 ## Usage
@@ -45,6 +80,10 @@ dspyteach path/to/project --glob "**/*.py" --glob "**/*.md"
 ```
 
 Use `--non-recursive` to stay in the top-level directory, add `--glob` repeatedly to narrow the target set, and pass `--raw` to print the raw DSPy prediction object instead of the formatted report.
+
+Need to double-check files before the model runs? Add `--confirm-each` (alias `--interactive`) to prompt before every file, accepting with Enter or skipping with `n`.
+
+To omit specific subdirectories entirely, pass one or more `--exclude-dirs` options. Each value can list comma-separated relative paths (for example `--exclude-dirs "build/,venv/" --exclude-dirs data/raw`). The analyzer ignores any files whose path begins with the provided prefixes.
 
 To change where reports land, supply `--output-dir /path/to/reports`. When omitted the CLI writes to `dspy_file/data/` next to the module. Every run prints the active model name and the resolved output directory before analysis begins so you can confirm the environment at a glance. For backwards compatibility the installer also registers `dspy-file-teaching` as an alias.
 
@@ -81,7 +120,7 @@ The repository is configured for standard Python packaging via `pyproject.toml` 
 # (optional) bump the version before you publish
 uv version --bump patch
 
-# build the source distribution and wheel; artifacts land in ../dist/
+# build the source distribution and wheel; artifacts land in dist/
 uv build --no-sources
 
 # publish to PyPI (or TestPyPI) once you have an API token
@@ -110,7 +149,7 @@ GitHub Actions users can trigger `.github/workflows/publish-testpypi.yml` to bui
 
 - Checks out the repository (ensuring `pyproject.toml` is present as required by uv publish).
 - Installs uv with Python 3.12.
-- Runs `uv build --no-sources` inside `dspy-file/`.
+ - Runs `uv build --no-sources` from the repository root.
 - Publishes with `uv publish --index testpypi dist/*` using the `TEST_PYPI_TOKEN` secret.
 
 See the [uv publishing guide](https://docs.astral.sh/uv/guides/package/#publishing-your-package) for the official note about requiring a checkout when using `--index`.

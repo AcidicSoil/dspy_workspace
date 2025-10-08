@@ -29,4 +29,4 @@ jobs:
       - name: Publish to TestPyPI
         env:
           UV_PUBLISH_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
-        run: uv publish --index testpypi dist/*
+        run: uv publish --index testpypi
