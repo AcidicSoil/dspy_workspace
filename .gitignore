@@ -26,6 +26,8 @@ uv.lock
 AGENTS.md
 GEMINI.md
 
+
+index.json
 # Logs
 *.log
 npm-debug.log*
