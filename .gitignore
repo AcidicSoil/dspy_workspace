@@ -5,7 +5,7 @@ dspy/
 .taskmaster/
 DSPY_Dev_Assistant/
 artifacts/
-
+codefetch/
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 
