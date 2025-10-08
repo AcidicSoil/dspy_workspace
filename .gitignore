@@ -1,5 +1,5 @@
 dspy/*
-!dspy/docs/docs/tutorials/*.md
+!dspy/docs/docs/tutorials/*
 .clinerules/
 .cursor/
 .gemini/
