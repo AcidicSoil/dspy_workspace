@@ -6,6 +6,7 @@ dspy/
 DSPY_Dev_Assistant/
 artifacts/
 codefetch/
+other/
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
 
@@ -19,7 +20,7 @@ mlruns/
 **/.venv/
 *.learning.json
 # Misc. workspaces
-/other
+
 *:Zone.Identifier
 uv.lock
 

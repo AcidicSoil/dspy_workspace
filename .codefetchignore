@@ -1,6 +1,7 @@
 test/
 vitest.config.ts
 dspy/
+!dspy/docs/docs/tutorials/
 .clinerules/
 .cursor/
 .gemini/
