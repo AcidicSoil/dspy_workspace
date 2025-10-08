@@ -23,6 +23,8 @@ mlruns/
 
 *:Zone.Identifier
 uv.lock
+AGENTS.md
+GEMINI.md
 
 # Logs
 *.log
