@@ -26,5 +26,5 @@
 | Tracking DSPy Optimizers | MLflow optimizer tracing | Optimizer config fields, metrics outputs | Specifies evaluation nodes and success metrics for capability validation. |
 | Output Refinement | `dspy.BestOfN`, `dspy.Refine` | `reward_fn(args, pred)` callbacks | Associates iterative improvement loops with graph nodes requiring quality gating. |
 
-**Suggested Next Step**
-- Prototype a thin slice by implementing one RPG capability with the `Custom Module` pattern, back it with `RAG` retrieval, and instrument the flow using the observability stack before scaling to the full graph. `.codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:4800` `.codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:17396` `.codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:16063`
+    **Suggested Next Step**
+    - Prototype a thin slice by implementing one RPG capability with the    `Custom Module` pattern, back it with `RAG` retrieval, and instrument  the flow using the observability stack before scaling to the full    graph. `.codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:4800` `.    codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:17396` `. codefetch_dspyTutorial/DSPY-Tutorials_codebase.md:16063`

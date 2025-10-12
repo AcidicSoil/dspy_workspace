@@ -18,7 +18,7 @@ HTTPS_RE = re.compile(
     r"^https?://github\.com/([^/]+)/([^/]+?)(?:\.git)?(?:/.*)?$", re.IGNORECASE
 )
 SSH_RE = re.compile(r"^git@github\.com:([^/]+)/([^/]+?)(?:\.git)?$", re.IGNORECASE)
-MODEL_NAME = "hf.co/unsloth/Qwen3-4B-Thinking-2507-GGUF:Q4_K_M"
+MODEL_NAME = "hf.co/unsloth/Qwen3-4B-Instruct-2507-GGUF:Q6_K_XL"
 
 
 def normalize_repo_url(url: str) -> str:
@@ -177,25 +177,48 @@ if __name__ == "__main__":
     write_text(llms_path, result.llms_txt_content, add_stamp=args.stamp)
 
     # Prefer the canonical API, but fall back if needed
+#    try:
+#        from llms_txt import create_ctx
+#    except ImportError:
+#        from llm_ctx.core import create_ctx
+#    # Create contexts from the pristine in-memory text (no stamp inside parser input)
+#
+#    ctx = create_ctx(txt, optional=False)
+#    ctx_full = create_ctx(txt, optional=True)
+#
+#    ctx_path = os.path.join(repo_root, f"{base}-llms-ctx.txt")
+#    ctx_full_path = os.path.join(repo_root, f"{base}-llms-ctx-full.txt")
+#
+#    write_text(ctx_path, ctx, add_stamp=args.stamp)
+#    write_text(ctx_full_path, ctx_full, add_stamp=args.stamp)
+
+    # Build a small 'ctx' index if you still want it
     try:
         from llms_txt import create_ctx
     except ImportError:
-        from llm_ctx.core import create_ctx
-    # Create contexts from the pristine in-memory text (no stamp inside parser input)
+        create_ctx = None
+    if create_ctx:
+        ctx = create_ctx(txt, optional=False)
+        ctx_path = os.path.join(repo_root, f"{base}-llms-ctx.txt")
+        write_text(ctx_path, ctx, add_stamp=args.stamp)
 
-    ctx = create_ctx(txt, optional=False)
-    ctx_full = create_ctx(txt, optional=True)
+    # NEW: Private-aware full variant using GitHub API (base64 decode)
+    from repo_full_builder import build_llms_full_from_repo
+    llms_full = build_llms_full_from_repo(txt)
+    llms_full_path = os.path.join(repo_root, f"{base}-llms-full.txt")
+    write_text(llms_full_path, llms_full, add_stamp=args.stamp)
 
-    ctx_path = os.path.join(repo_root, f"{base}-llms-ctx.txt")
-    ctx_full_path = os.path.join(repo_root, f"{base}-llms-ctx-full.txt")
 
-    write_text(ctx_path, ctx, add_stamp=args.stamp)
-    write_text(ctx_full_path, ctx_full, add_stamp=args.stamp)
+#    print("Artifacts written:")
+#    print(f" - {llms_path}")
+#    print(f" - {ctx_path}")
+#    print(f" - {ctx_full_path}")
 
     print("Artifacts written:")
     print(f" - {llms_path}")
-    print(f" - {ctx_path}")
-    print(f" - {ctx_full_path}")
+    if create_ctx:
+        print(f" - {ctx_path}")
+    print(f" - {llms_full_path}")
 
     # Show preview
     preview = (result.llms_txt_content or "").strip()

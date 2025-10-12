@@ -17,8 +17,8 @@ from repo_helpers import gather_repository_info
 # Replace with your actual LM provider if not using a local one
     # For models like Llama
 lm = dspy.LM(
-     #"ollama_chat/acidic/Qwen3-Coder-IQ2_XXS:latest",
-    "ollama_chat/hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS",
+    # "ollama_chat/acidic/Qwen3-Coder-IQ2_XXS:latest",
+    "ollama_chat/hf.co/unsloth/Qwen3-4B-Thinking-2507-GGUF:Q4_K_M",
     api_base="http://localhost:11434",  # Local Ollama server URL
     api_key="EMPTY",  # Usually empty for local Ollama; remove if you do not have a key
     streaming=False,
