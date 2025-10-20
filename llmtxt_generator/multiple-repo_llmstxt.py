@@ -103,7 +103,7 @@ def generate_llms_txt_for_dspy():
 
 def generate_llms_txt_for_multiple_repos(repo_urls):
     lm = dspy.LM(
-        "ollama_chat/hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS",
+        "ollama_chat/hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_S",
         api_base="http://localhost:11434",
         api_key="EMPTY",
         streaming=False,

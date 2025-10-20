@@ -54,7 +54,7 @@ def prompt_for_repo_url() -> str:
 def generate_llms_txt_for_dspy(repo_url: str):
     # Correct Ollama LM initialization
     lm = dspy.LM(
-        "ollama_chat/hf.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF:IQ2_XXS",
+        "ollama_chat/hf.co/Mungert/osmosis-mcp-4b-GGUF:Q4_K_S",
         api_base="http://localhost:11434",
         api_key="",
         streaming=False,

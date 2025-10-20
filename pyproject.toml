@@ -1,0 +1,15 @@
+[project]
+name = "dspy-workspace"
+version = "0.1.0"
+description = "Utilities and tutorials for generating llms.txt context files with DSPy."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dspy-ai>=2.4.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+    "jinja2>=3.1.0",
+    "python-multipart>=0.0.7",
+]

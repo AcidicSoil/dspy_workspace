@@ -1,0 +1,60 @@
+## project_purpose
+LiteLLM is a Python library that acts as a proxy server for calling various large language model (LLM) APIs. It simplifies the process of interacting with different providers like OpenAI, Anthropic, Azure, and others by translating requests into the appropriate API calls, managing rate limits, and providing logging and observability features.
+
+## key_concepts
+Unified API Gateway: LiteLLM serves as a single entry point for multiple LLM providers, abstracting the complexity of interacting with each provider's API.
+Provider Agnosticism: Supports a wide range of LLM providers, including OpenAI, Anthropic, Azure, Hugging Face, etc.
+Cost Tracking and Budgeting: Enables tracking of API usage costs and setting budgets per project or user.
+Rate Limiting: Implements rate limiting to control API usage and prevent overloading.
+Logging and Observability: Integrates with tools like Langfuse, Helicone, and others to log and monitor API calls.
+Routing and Load Balancing: Uses a router to distribute requests across multiple models or providers based on predefined strategies.
+Security and Authentication: Provides mechanisms for secure access, including custom authentication and key management.
+
+## architecture_overview
+The architecture of LiteLLM consists of several components: a proxy server that handles incoming requests, a routing module that determines which provider/model to use, a translation layer that converts requests into the appropriate API format, and a logging/observability layer that tracks and records API interactions. The proxy server also manages user authentication, rate limiting, and budget tracking. The system is designed to be modular, allowing for easy integration with new providers and features.
+
+## important_directories
+litellm
+litellm/proxy
+litellm/proxy/client
+litellm/proxy/client/cli
+litellm/proxy/db
+litellm/proxy/guardrails
+litellm/proxy/hooks
+litellm/proxy/image_endpoints
+litellm/proxy/management_endpoints
+litellm/proxy/pass_through_endpoints
+litellm/proxy/spend_tracking
+litellm/proxy/test
+litellm/proxy/ui
+litellm/responses
+litellm/router
+litellm/tests
+litellm/ui
+litellm/utils
+litellm/version
+litellm/dashboard
+litellm/dashboard/src
+litellm/dashboard/src/app
+litellm/dashboard/src/components
+litellm/dashboard/src/contexts
+litellm/dashboard/src/hooks
+litellm/dashboard/src/layouts
+litellm/dashboard/src/pages
+litellm/dashboard/src/styles
+litellm/dashboard/src/types
+litellm/dashboard/src/utils
+
+## entry_points
+litellm:run_server
+litellm-proxy:cli
+
+## development_info
+The project includes a comprehensive set of development tools and dependencies for testing, linting, and code quality assurance. The development environment requires Python 3.8.1 or higher, along with several libraries such as fastuuid, httpx, openai, and others. The package uses tools like pytest, flake8, and black for testing and code formatting. The project also includes a web dashboard for managing models and users, indicating a focus on user-facing tools and administrative features.
+
+## usage_examples
+1. Initialize LiteLLM with OpenAI and Anthropic providers: `from litemll import LiteLLM; LiteLLM(providers=['openai', 'anthropic'])`
+2. Set up rate limiting: `LiteLLM(rate_limit=100)`
+3. Enable logging with Langfuse: `LiteLLM(loggers=['langfuse'])`
+4. Route requests to different models: `LiteLLM(router='round_robin')`
+5. Track API costs per project: `LiteLLM(cost_tracking=True)`
